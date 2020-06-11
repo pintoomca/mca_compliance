@@ -30,17 +30,19 @@ class DashboardController extends Controller
         // {
         //     $this->dashboardRoC();
         // }
-        return $this->dashboardAdmin();
-      
+        return $this->dashboardAdmin($request);
+
     }
-    public function dashboardAdmin()
+    public function dashboardAdmin($request)
     {
+        $curr_year = ($request->input('year') != '') ? $request->input('year'):'2017';
+
         //Get company count Inspector-wise
         $comp_data = DB::table('tble_email_sent')
         ->join('tble_inspector_details', 'tble_email_sent.rocCode', '=', 'tble_inspector_details.rocCode')
         ->join('master_users', 'tble_inspector_details.userID', '=', 'master_users.uID')
-        ->select(DB::raw('count(*) as _count, tble_email_sent.uID, master_users.firstName, tble_inspector_details.firstName as fName'))
-        ->whereRaw('tble_inspector_details.deptID=2 and tble_inspector_details.catID=50 and master_users.uID IN (383,384,385,386,387, 388, 389)')
+        ->select(DB::raw('count(distinct CIN) as _count, tble_email_sent.uID, master_users.firstName, tble_inspector_details.firstName as fName,YearOfFilling'))
+        ->whereRaw("tble_inspector_details.deptID=2 and tble_inspector_details.catID=50 and master_users.uID IN (383,384,385,386,387, 388, 389) and YearOfFilling=$curr_year")
         ->groupBy('tble_email_sent.uID')
         ->groupBy('master_users.firstName')
         ->groupBy('tble_inspector_details.firstName')
@@ -52,7 +54,7 @@ class DashboardController extends Controller
             $inspector_names[] = $rec->firstName." ( ".$rec->fName." )";
             $comp_count[] =  $rec->_count;
         }
-        $data = ['inspector_names'=>$inspector_names,'inspector_comp_count'=>json_encode($comp_count)];
+        $data = ['inspector_names'=>$inspector_names,'inspector_comp_count'=>json_encode($comp_count), 'year' =>$curr_year];
 
        //Get company count provision-wise
        $comp_data = DB::table('tble_provision_master_final_set')
@@ -72,11 +74,10 @@ class DashboardController extends Controller
        $data['provision_wise_data'] = ['_names'=>$provision_names,'_count'=>$comp_count,'_years'=>array_unique($provision_year)];
 
        // Provision wise email sent
-       $comp_data = DB::table('tble_email_sent')
-       ->select(DB::raw('count(distinct CIN) as _count,  provisionId, YearOfFilling'))
-       ->groupBy('provisionId')
-       ->groupBy('YearOfFilling')
-       ->get();
+       $query = "select count(distinct CIN) as _count,  provisionId, YearOfFilling from `tble_email_sent`
+       where `YearOfFilling` = $curr_year group by `provisionId`";
+       $comp_data = DB::select($query);
+
        $provision_names = [];
        $email_sent_count = [];
        $email_year = [];
@@ -91,40 +92,43 @@ class DashboardController extends Controller
        //ROC wise email sent
 
         $comp_data = DB::table('tble_email_sent')
-       ->select(DB::raw('count(distinct CIN) as _count,  roc_code, roc_name, YearOfFilling'))
+       ->select(DB::raw('count(distinct CIN) as _count,  roc_code, roc_name'))
        ->join('tble_roc_name_map', 'tble_email_sent.rocCode', '=', 'tble_roc_name_map.roc_code')
        ->groupBy('roc_code')
        ->groupBy('roc_name')
-       ->groupBy('YearOfFilling')
        ->get();
        $roc_names = [];
        $email_sent_count = [];
-       $email_year = [];
        foreach($comp_data as $rec)
        {
            $roc_names[] = $rec->roc_name;
            $email_sent_count[] =  $rec->_count;
-           $email_year[] = $rec->YearOfFilling;
        }
-       $data['roc_wise_email'] = ['_names'=>$roc_names, '_count'=>$email_sent_count,'_years'=>array_unique($email_year)];
+       $data['roc_wise_email'] = ['_names'=>$roc_names, '_count'=>$email_sent_count,'year'=>$curr_year];
 
        //Notice status report
 
        $comp_data = DB::table('tble_provision_master_final_set')
        ->select(DB::raw('count(*) as _count, provision_id, YearOfFiling, tble_provision_meta_data.status, tble_provision_meta_data.action'))
        ->join('tble_provision_meta_data', 'tble_provision_master_final_set.status', '=', 'tble_provision_meta_data.status')
+       ->where('YearOfFiling',$curr_year)
        ->groupBy('provision_id')
-       ->groupBy('YearOfFiling')
+        ->groupBy('YearOfFiling')
        ->groupBy('tble_provision_meta_data.status')
        ->groupBy('tble_provision_meta_data.action')
        ->get();
        $notice_status = [];
+       $notice_actions = [];
+       $notice_counts = [];
        foreach($comp_data as $rec)
        {
-           $notice_status[$rec->action][] =  ['provision'=>"Provision ".$rec->provision_id, '_count'=>$rec->_count];
+           $notice_actions[] =$rec->action;
+           $notice_counts[$rec->provision_id][$rec->status] = $rec->_count;
        }
-       $data['notice_status'] = $notice_status;
-
+       $data['notice_status'] = ['notice_actions'=>array_unique($notice_actions), 'notice_counts'=> $notice_counts];
+        // echo "<pre>";
+        // print_r($data['notice_status']);
+        // die();
        //Master company categorisation on the basis of company class(Public, private, others)
         $comp_data = DB::table('master_companies_distinct_all')
        ->select(DB::raw('count(*) as _count, COMPANY_CLASS'))
@@ -135,43 +139,53 @@ class DashboardController extends Controller
        foreach($comp_data as $rec)
        {
 
-           $company_class_data[] =  ['name'=>($rec->COMPANY_CLASS !='' && $rec->COMPANY_CLASS !=' ')?$rec->COMPANY_CLASS:'Others', 'y'=>$rec->_count];
+           $company_class_data[] =  ['year'=>$curr_year, 'name'=>($rec->COMPANY_CLASS !='' && $rec->COMPANY_CLASS !=' ')?$rec->COMPANY_CLASS:'Others', 'y'=>$rec->_count];
        }
        $data['company_class_data'] = $company_class_data;
 
-        // master and compliance company data comparison
-        $comp_data = DB::select("SELECT count(*) as _count1,_count2, master_companies_distinct_all.COMPANY_CLASS FROM cms_dev_18_02_2020.master_companies_distinct_all 
-        join (SELECT count(*) as _count2, COMPANY_CLASS FROM cms_dev_18_02_2020.tble_provision_master_final_set
-        join master_companies_distinct_all on master_companies_distinct_all.cin=tble_provision_master_final_set.cin 
+        // master and Non compliance company data comparison
+        $comp_data = DB::select("SELECT count(*) as _count1,_count2, master_companies_distinct_all.COMPANY_CLASS
+        FROM master_companies_distinct_all
+        join (SELECT count(*) as _count2, COMPANY_CLASS FROM tble_provision_master_final_set
+        join master_companies_distinct_all on master_companies_distinct_all.cin=tble_provision_master_final_set.cin
         group by COMPANY_CLASS) as tble2 on tble2.COMPANY_CLASS =  master_companies_distinct_all.COMPANY_CLASS
         group by master_companies_distinct_all.COMPANY_CLASS");
 
         $total_company = [];
+        $total_non_compliance_company =[];
         $total_compliance_company =[];
         $comp_class = [];
         $total_sum = 0;
+        $non_compliance_sum = 0;
         $compliance_sum = 0;
         foreach($comp_data as $rec)
         {
             $total_company[] = $rec->_count1;
-            $total_compliance_company[] =$rec->_count2;
+            $total_non_compliance_company[] =$rec->_count2;
+            $total_compliance_company[] =(int)$rec->_count1-(int)$rec->_count2;
             $total_sum += 0+(int)$rec->_count1;
-            $compliance_sum += 0+(int)$rec->_count2;
+            $non_compliance_sum += 0+(int)$rec->_count2;
+            $compliance_sum += 0+(int)$rec->_count1-(int)$rec->_count2;
             $comp_class[] = $rec->COMPANY_CLASS;
         }
-        $data['master_compliance_comparison'] = ['total_company'=>$total_company, 'comp_class'=>$comp_class,
-        'total_compliance_company'=>$total_compliance_company, 'total_sum'=>$total_sum,'compliance_sum'=>$compliance_sum];
+        $data['master_compliance_comparison'] = ['total_company'=>$total_company,
+        'comp_class'=>$comp_class,
+        'total_non_compliance_company'=>$total_non_compliance_company,
+        'total_compliance_company'=>$total_compliance_company,
+        'total_sum'=>$total_sum,
+        'compliance_sum'=>$compliance_sum,
+        'non_compliance_sum'=>$non_compliance_sum];
         // echo "<pre>";
         // print_r($master_compliance_comparison);
         // die();
-        return view('dashboard.dashboard',$data); 
+        return view('dashboard.dashboard',$data);
     }
     public function dashboard_DG_RD_INS()
     {
-        return view('dashboard1.dashboard'); 
+        return view('dashboard1.dashboard');
     }
     public function dashboardRoC()
     {
-        return view('dashboard4.dashboard'); 
+        return view('dashboard4.dashboard');
     }
 }

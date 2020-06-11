@@ -36,7 +36,7 @@ Route::post('/recoverSubmit', 'AuthController@recoverSubmit');
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.request');
 Route::post('password/resetPassword', 'Auth\ResetPasswordController@resetPassword')->name('password.reset');
 Route::group(['middleware' => ['jwt.auth']], function() {
-   
+
     Route::get('test', function(){
         return response()->json(['foo'=>'bar']);
     });
@@ -50,3 +50,13 @@ Route::get('/home4', 'HomeController@index4');
 Route::get('/home5', 'HomeController@index5');
 //Dashboard
 Route::get('/dashboard', 'DashboardController@index');
+//Notice
+Route::get('notice/list', 'NoticeController@index');
+Route::get('notice_roc/list', 'NoticeRocController@index');
+Route::get('provision_wise_notice/list', 'ProvisionWiseNoticeController@index');
+Route::get('provision_wise_company/list', 'ProvisionWiseCompanyController@index');
+Route::get('inspector_wise_notice/list', 'NoticeInspectorController@index');
+Route::get('compliance_company/view', 'ComplianceCompanyController@index');
+Route::get('compliance_mail/view', 'ComplianceCompanyController@mailView');
+Route::get('company/list', 'CompanyController@index');
+Route::get('company/view', 'CompanyController@view');

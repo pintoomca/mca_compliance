@@ -15,7 +15,7 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        return view('user.register'); 
+        return view('user.register');
     }
     /**
      * API Register
@@ -26,7 +26,7 @@ class AuthController extends Controller
     public function registerSubmit(Request $request)
     {
         $credentials = $request->only('firstName','lastName','middleName', 'email', 'password','catID','depID','locID','roleId','reporting_user_id');
-        
+
         $rules = [
             'firstName' => 'required|max:255',
             'lastName' => 'max:255',
@@ -38,9 +38,9 @@ class AuthController extends Controller
             'locID' => 'max:255',
             'roleId' => 'required|max:255',
             'reporting_user_id' => 'max:255',
-            
 
-            
+
+
         ];
         $validator = Validator::make($credentials, $rules);
         if($validator->fails()) {
@@ -58,8 +58,8 @@ class AuthController extends Controller
         $locID = $request->locID;
         $roleId = $request->roleId;
         $reporting_user_id = $request->reporting_user_id;
-        
-        
+
+
         $user = User::create(['name'=> $name,'firstName' => $firstName,'lastName' => $lastName,'middleName' => $middleName, 'email' => $email, 'password' => Hash::make($password),'cate_id' => $cate_id,'depID' => $depID,'locID' => $locID,'roleId' => $roleId,'reporting_user_id' => $reporting_user_id]);
         $verification_code = str_random(30); //Generate verification code
         DB::table('user_verifications')->insert(['user_id'=>$user->id,'token'=>$verification_code]);
@@ -70,7 +70,7 @@ class AuthController extends Controller
         //         $mail->to($email, $name);
         //         $mail->subject($subject);
         //     });
-        
+
         return Redirect::to('login')->with('success', 'Thanks for signing up! Please check your email to complete your registration.');
     }
     /**
@@ -104,7 +104,7 @@ class AuthController extends Controller
         if(Session::get('email') !=''){
             return Redirect::to('dashboard')->with('success', 'Successfully Login!');
         }
-        return view('user.login'); 
+        return view('user.login');
     }
     /**
      * API Login, on success return JWT Auth token
@@ -126,7 +126,7 @@ class AuthController extends Controller
             return Redirect::to('/login')
                 ->withErrors($validator)->withInput();
         }
-        
+
         //$credentials['is_verified'] = 1;
         try {
             // attempt to verify the credentials and create a token for the user
@@ -155,7 +155,7 @@ class AuthController extends Controller
         Session::put('department_name', $data->department_name);
         Session::put('location_name', $data->location_name);
         Session::put('reportingUserID', $data->reportingUserID);
-         return Redirect::to('dashboard')->with('success', 'Successfully Login!');
+         return Redirect::to('dashboard?year=2017')->with('success', 'Successfully Login!');
     }
     /**
      * Log out
@@ -181,7 +181,7 @@ class AuthController extends Controller
      */
     public function recover(Request $request)
     {
-        return view('user.forget-pass'); 
+        return view('user.forget-pass');
     }
     public function recoverSubmit(Request $request)
     {
