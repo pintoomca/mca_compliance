@@ -109,9 +109,9 @@
                         <nav>
                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                 <a class="nav-item nav-link active show" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true" title="Show Cause Notice Trace">SCN</a>
-                                <a class="nav-item nav-link" id="nav-fy1617-tab" data-toggle="tab" href="#nav-fy1617" role="tab" aria-controls="nav-fy1617" aria-selected="false">Compliance FY 2016-17</a>
-                                <a class="nav-item nav-link" id="nav-fy1718-tab" data-toggle="tab" href="#nav-fy1718" role="tab" aria-controls="nav-fy1718" aria-selected="false">Compliance FY 2017-18</a>
-                                <a class="nav-item nav-link" id="nav-fy1819-tab" data-toggle="tab" href="#nav-fy1819" role="tab" aria-controls="nav-fy1819" aria-selected="false">Compliance FY 2018-19</a>
+                                <a class="nav-item nav-link <?=($_REQUEST['year'] == '2017')?'active':'';?>" id="nav-fy1617-tab" data-toggle="tab" href="{{url('dashboard?year=2017')}}" role="tab" aria-controls="nav-fy1617" aria-selected="false">Compliance FY 2016-17</a>
+                                <a class="nav-item nav-link <?=($_REQUEST['year'] == '2018')?'active':'';?>" id="nav-fy1718-tab" data-toggle="tab" href="#nav-fy1718" role="tab" aria-controls="nav-fy1718" aria-selected="false">Compliance FY 2017-18</a>
+                                <a class="nav-item nav-link <?=($_REQUEST['year'] == '2019')?'active':'';?>" id="nav-fy1819-tab" data-toggle="tab" href="#nav-fy1819" role="tab" aria-controls="nav-fy1819" aria-selected="false">Compliance FY 2018-19</a>
                                 <a class="nav-item nav-link" id="nav-comparative-tab" data-toggle="tab" href="#nav-comparative" role="tab" aria-controls="nav-comparative" aria-selected="false">Comparative</a>
                             </div>
                         </nav>
@@ -121,7 +121,7 @@
                             <div class="col-lg-12">
                             <!-- <h2 class="title-1 m-b-25">Notice Status</h2> -->
                                 <div class="table-responsive table--no-card m-b-40">
-                                    <table class="table table-borderless table-striped table-earning">
+                                    <table class="table table-borderless table-earning" style="background-color:#fff;">
                                         <thead>
                                             <tr>
                                             <th class="text-center">Provision</th>
@@ -139,7 +139,7 @@
                                             <tr>
                                              <td class="text-center"><?=$k;?></td>
                                             <td class="text-center">
-                                            <div class="rounded shadow-sm text-justify" style="min-height:25px; color:black; background-color:#f7eca6; padding:10px; ">
+                                            <div class="text-center">
                                             <span>
                                             <?php if(isset($v[1])){ ?>
                                             <a href="{{ url('notice/list?provision_id='.$k.'&status=1') }}&year={{$year}}" target="_blank"><?php echo $v[1];?></a>
@@ -147,7 +147,7 @@
                                             </span></div>
                                             </td>
                                             <td class="text-center">
-                                            <div class="rounded shadow-sm text-justify" style="min-height:25px; color:black; background-color:#f7eca6; padding:10px; ">
+                                            <div class="text-center">
                                             <span>
                                             <?php if(isset($v[2])){ ?>
                                             <a href="{{ url('notice/list?provision_id='.$k.'&status=2') }}&year={{$year}}" target="_blank"><?php echo $v[2];?></a>
@@ -156,7 +156,7 @@
                                             </div>
                                             </td>
                                             <td class="text-center">
-                                            <div class="rounded shadow-sm text-justify" style="min-height:25px; color:black; background-color:#f7eca6; padding:10px; ">
+                                            <div class="text-center">
                                             <span>
                                             <?php if(isset($v[3])){ ?>
                                             <a href="{{ url('notice/list?provision_id='.$k.'&status=3') }}&year={{$year}}" target="_blank"><?php echo $v[3];?></a>
@@ -164,7 +164,7 @@
                                             </span></div>
                                             </td>
                                             <td class="text-center">
-                                            <div class="rounded shadow-sm text-justify" style="min-height:25px; color:black; background-color:#f7eca6; padding:10px; ">
+                                            <div class="text-center">
                                             <span>
                                             <?php if(isset($v[0])){ ?>
                                             <a href="{{ url('notice/list?provision_id='.$k.'&status=0') }}&year={{$year}}" target="_blank"><?php echo $v[0];?></a>

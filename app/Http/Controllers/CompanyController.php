@@ -2,8 +2,8 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
-//use App\Home;
 use Validator, DB, Hash;
+use App\Company;
 class CompanyController extends Controller
 {
     /**
@@ -26,6 +26,17 @@ class CompanyController extends Controller
         $year  = $request->input('year');
         $params['company_class'] = $request->input('company_class');
         $params['year'] = $request->input('year');
+        if($request->input('sort') !='' && $request->input('direction') !='')
+        {
+            $search_key .= " order by ".$request->input('sort')."  ".$request->input('direction')." ";
+            $params['sort'] = $request->input('sort');
+            $params['direction'] = $request->input('direction');
+        }
+        if($request->input('LISTED_FLAG') !='')
+        {
+            $search_key .= " AND LISTED_FLAG LIKE '%".$request->input('LISTED_FLAG')."%'";
+            $params['LISTED_FLAG'] = $request->input('LISTED_FLAG');
+        }
         if($request->input('LISTED_FLAG') !='')
         {
             $search_key .= " AND LISTED_FLAG LIKE '%".$request->input('LISTED_FLAG')."%'";
@@ -60,7 +71,8 @@ class CompanyController extends Controller
        $query = "SELECT CIN, compname, ADDR_LINE1,ADDR_LINE2
        FROM master_companies_distinct_all
        where COMPANY_CLASS like '%".$company_class."%' $search_key  LIMIT $slice_init, $perPage";
-       $pagedData = DB::select($query);
+
+       $pagedData = Company::hydrate(DB::select($query)); ;
 
        $query = "SELECT count(*) as _count
        FROM master_companies_distinct_all

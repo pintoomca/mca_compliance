@@ -1,20 +1,18 @@
 <?php
-
-
 namespace App;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
-
-class CompanyCsr extends Model
+class Company extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'company_csr';
+    protected $table = 'master_companies_distinct_all';
     /**
      * The primary key associated with the table.
      *
@@ -22,8 +20,8 @@ class CompanyCsr extends Model
      */
     protected $primaryKey = 'id';
 
-    const CREATED_AT = 'created_at';
-    const UPDATED_AT = 'updated_at';
+    // const CREATED_AT = 'created_at';
+    // const UPDATED_AT = 'updated_at';
     /**
      * The attributes that are mass assignable.
      *
@@ -31,11 +29,12 @@ class CompanyCsr extends Model
      */
     protected $fillable = [
         'CIN', 'YearOfFiling', 'csrappli', 'csrpolicy', 'csr_committee',
-         'turnover', 'Networth', 'AvgNetPro', 'CSRExpPres', 'CSR_Spent', 
-         'locarea_spent', 'csr_devsect', 'csr_project', 'csr_state', 
+         'turnover', 'Networth', 'AvgNetPro', 'CSRExpPres', 'CSR_Spent',
+         'locarea_spent', 'csr_devsect', 'csr_project', 'csr_state',
          'project_amtoverlay', 'project_amountspent', 'administ_overhead',
-          'unspent_amt', 'detailsia', 'modeofamtspent', 'unspent_reason', 
-          'compname', 'CompCat', 'CompSubCat', 'listing', 'compclass', 
+          'unspent_amt', 'detailsia', 'modeofamtspent', 'unspent_reason',
+          'compname', 'CompCat', 'CompSubCat', 'listing', 'compclass',
           'compstate', 'compsector', 'compROC', 'csr_district'
     ];
+    public $sortable = ['id', 'name', 'details', 'created_at', 'updated_at'];
 }
