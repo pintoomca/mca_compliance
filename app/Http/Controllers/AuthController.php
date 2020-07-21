@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\User;
+use App\MasterUser;
 use Auth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Validator, DB, Hash, Mail;
@@ -10,9 +10,9 @@ use Illuminate\Mail\Message;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
+
 class AuthController extends Controller
 {
-
     public function register(Request $request)
     {
         return view('user.register');
@@ -60,7 +60,7 @@ class AuthController extends Controller
         $reporting_user_id = $request->reporting_user_id;
 
 
-        $user = User::create(['name'=> $name,'firstName' => $firstName,'lastName' => $lastName,'middleName' => $middleName, 'email' => $email, 'password' => Hash::make($password),'cate_id' => $cate_id,'depID' => $depID,'locID' => $locID,'roleId' => $roleId,'reporting_user_id' => $reporting_user_id]);
+        $user = MasterUser::create(['name'=> $name,'firstName' => $firstName,'lastName' => $lastName,'middleName' => $middleName, 'email' => $email, 'password' => Hash::make($password),'cate_id' => $cate_id,'depID' => $depID,'locID' => $locID,'roleId' => $roleId,'reporting_user_id' => $reporting_user_id]);
         $verification_code = str_random(30); //Generate verification code
         DB::table('user_verifications')->insert(['user_id'=>$user->id,'token'=>$verification_code]);
         $subject = "Please verify your email address.";
@@ -83,7 +83,7 @@ class AuthController extends Controller
     {
         $check = DB::table('user_verifications')->where('token',$verification_code)->first();
         if(!is_null($check)){
-            $user = User::find($check->user_id);
+            $user = MasterUser::find($check->user_id);
             if($user->is_verified == 1){
                 return response()->json([
                     'success'=> true,
@@ -112,51 +112,51 @@ class AuthController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function loginSubmit(Request $request)
-    {
-        $credentials = $request->only('emailID', 'password_temp');
-        $remember = ($request->remember) ? true : false;
-        $rules = [
-            'emailID' => 'required|email',
-            'password_temp' => 'required',
-        ];
+    // public function loginSubmit(Request $request)
+    // {
+    //     $credentials = $request->only('emailID', 'password_temp');
+    //     $remember = ($request->remember) ? true : false;
+    //     $rules = [
+    //         'emailID' => 'required|email',
+    //         'password_temp' => 'required',
+    //     ];
 
-        $validator = Validator::make($credentials, $rules);
-        if($validator->fails()) {
-            return Redirect::to('/login')
-                ->withErrors($validator)->withInput();
-        }
+    //     $validator = Validator::make($credentials, $rules);
+    //     if($validator->fails()) {
+    //         return Redirect::to('/login')
+    //             ->withErrors($validator)->withInput();
+    //     }
 
-        //$credentials['is_verified'] = 1;
-        try {
-            // attempt to verify the credentials and create a token for the user
-            $data = DB::table('master_users')->where(['emailID'=>$request->emailID, 'password_temp'=>$request->password_temp])->first();
+    //     //$credentials['is_verified'] = 1;
+    //     try {
+    //         // attempt to verify the credentials and create a token for the user
+    //         $data = DB::table('master_users')->where(['emailID'=>$request->emailID, 'password_temp'=>$request->password_temp])->first();
 
-            if (empty($data)) {
-                return Redirect::to('login')->with('error', 'We cant find an account with this credentials. Please make sure you entered the right information and you have verified your email address.');
-            }
-        } catch (Exception $e) {
-            // something went wrong whilst attempting to encode the token
-           return Redirect::to('login')->with('error', 'Failed to login, please try again.');
-        }
-        // all good so return the data
-        Session::put('emailID', $data->emailID);
-        Session::put('firstName', $data->firstName);
-        Session::put('middleName', $data->middleName);
-        Session::put('lastName', $data->lastName);
-        Session::put('catID', $data->catID);
-        Session::put('roleId', $data->roleId);
-        Session::put('depID', $data->depID);
-        Session::put('locID', $data->locID);
-
-        Session::put('catName', $data->catName);
-        Session::put('roleId', $data->roleId);
-        Session::put('designation_name', $data->designation_name);
-        Session::put('department_name', $data->department_name);
-        Session::put('location_name', $data->location_name);
-        Session::put('reportingUserID', $data->reportingUserID);
-         return Redirect::to('dashboard?year=2017')->with('success', 'Successfully Login!');
-    }
+    //         if (empty($data)) {
+    //             return Redirect::to('login')->with('error', 'We cant find an account with this credentials. Please make sure you entered the right information and you have verified your email address.');
+    //         }
+    //     } catch (Exception $e) {
+    //         // something went wrong whilst attempting to encode the token
+    //        return Redirect::to('login')->with('error', 'Failed to login, please try again.');
+    //     }
+    //     // all good so return the data
+    //     Session::put('emailID', $data->emailID);
+    //     Session::put('firstName', $data->firstName);
+    //     Session::put('middleName', $data->middleName);
+    //     Session::put('lastName', $data->lastName);
+    //     Session::put('catID', $data->catID);
+    //     Session::put('roleId', $data->roleId);
+    //     Session::put('depID', $data->depID);
+    //     Session::put('locID', $data->locID);
+    //     Session::put('catName', $data->catName);
+    //     Session::put('roleId', $data->roleId);
+    //     Session::put('designation_name', $data->designation_name);
+    //     Session::put('department_name', $data->department_name);
+    //     Session::put('location_name', $data->location_name);
+    //     Session::put('reportingUserID', $data->reportingUserID);
+    //     Session::put('UserType', 'Ministry');
+    //      return Redirect::to('dashboard?year=2017')->with('success', 'Successfully Login!');
+    // }
     /**
      * Log out
      * Invalidate the token, so user cannot use it anymore
@@ -185,7 +185,7 @@ class AuthController extends Controller
     }
     public function recoverSubmit(Request $request)
     {
-        $user = User::where('email', $request->email)->first();
+        $user = MasterUser::where('email', $request->email)->first();
         if (!$user) {
 
             return Redirect::to('recover')->with('error', 'Your email address was not found.');
@@ -200,6 +200,45 @@ class AuthController extends Controller
         //     return Redirect::to('recover')->with('error', $error_message);
         // }
         return Redirect::to('recover')->with('success', 'A reset email has been sent! Please check your email.');
+    }
+
+        /**
+     * API Login, on success return JWT Auth token
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function loginPublic(Request $request)
+    {
+        $redirect = ($request->redirect !='') ? $request->redirect : '';
+        $credentials = $request->only('email', 'password');
+        $remember = ($request->remember) ? true : false;
+        $rules = [
+            'email' => 'required|email',
+            'password' => 'required',
+        ];
+
+        $validator = Validator::make($credentials, $rules);
+        if($validator->fails()) {
+            return Redirect::to('/login')
+                ->withErrors($validator)->withInput();
+        }
+        //$credentials['is_verified'] = 1;
+        try {
+            // attempt to verify the credentials and create a token for the user
+            if (Auth::attempt($credentials)) {
+                return Redirect::to('dashboard?year=2017'.$redirect)->with('success', 'Successfully Login!');
+            }
+        } catch (Exception $e) {
+            // something went wrong whilst attempting to encode the token
+            return Redirect::to('login')->with('error', 'We cant find an account with this credentials. Please make sure you entered the right information and you have verified your email address.');
+
+        }
+        // all good so return the data
+
+
+
+
     }
 
 }

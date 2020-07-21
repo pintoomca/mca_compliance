@@ -1,5 +1,5 @@
             <div class="logo">
-                <a href="#">
+                <a href="{{url('/dashboard?year=2017')}}">
                     <img src="{{asset('assets/CoolAdmin/images/icon/mcaLogo.jpg')}}" alt="MCA Dashboard" />
                 </a>
             </div>

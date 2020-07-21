@@ -1,26 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <!-- Required meta tags-->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="au theme template">
-    <meta name="author" content="Hau Nguyen">
-    <meta name="keywords" content="au theme template">
-
-    <!-- Title Page-->
-    <title>Register</title>
-
-@include('dashboard.header')
-
-</head>
-
-<body class="animsition">
-    <div class="page-wrapper">
-        <div class="page-content--bge5">
-            <div class="container">
-                <div class="login-wrap">
+@extends('layout.master')
+@section('title', 'Compliance Monitoring Portal : Registration')
+@section('content')
+<div class="login-wrap">
                     <div class="login-content">
                         <div class="login-logo">
                             <a href="#">
@@ -38,7 +20,7 @@
                                 {{ session()->get('error') }}
                             </div>
                         @endif
-                        @foreach ($errors->all() as $message) 
+                        @foreach ($errors->all() as $message)
                             <div class="alert alert-danger">
                                 {{ $message }}
                             </div>
@@ -73,9 +55,9 @@
                                     <label>Category</label>
                                     <input class="au-input au-input--full" type="text" name="cat_id" placeholder="Category">
                                 </div>
-                                
 
-                                
+
+
                                 <div class="row">
                                     <div class="col-6">
                                     <div class="form-group">
@@ -104,7 +86,7 @@
                                 </div>
                                 </div>
                                </div>
-                               
+
                                 <div class="login-checkbox">
                                     <label>
                                         <input type="checkbox" name="aggree">Agree the terms and policy
@@ -127,14 +109,4 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-    </div>
-
-    @include('dashboard.footer');
-
-</body>
-
-</html>
-<!-- end document-->
+@stop

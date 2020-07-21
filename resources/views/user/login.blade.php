@@ -32,7 +32,38 @@
 
     <!-- Main CSS-->
     <link href="{{asset('assets/CoolAdmin/css/theme.css')}}" rel="stylesheet" media="all">
+<style>
+li {
+  float: left;
+}
 
+li a {
+  display: block;
+  color: black;
+  text-align: center;
+  padding: 12px;
+  width:240px;
+  text-decoration: none;
+}
+
+.tab-content{
+background: #fdfdfd;
+  line-height: 25px;
+  border: 1px solid #63c76a;
+  padding:30px 25px;
+}
+
+/* li a:hover,
+li a:focus, */
+li a.active
+{
+border: none;
+  background: #63c76a;
+  color:#fff;
+  border-radius:0;
+  transition:background 0.20s linear;
+}
+</style>
 </head>
 
 <body class="animsition">
@@ -43,7 +74,7 @@
                     <div class="login-content">
                         <div class="login-logo">
                             <a href="#">
-                                <img src="{{asset('assets/CoolAdmin/images/icon/mcaLogo.png')}}" alt="CoolAdmin">
+                            <img src="{{asset('assets/CoolAdmin/images/icon/mcaLogo.jpg')}}" alt="MCA Dashboard" />
                             </a>
                         </div>
                         <div class="login-form">
@@ -61,7 +92,49 @@
                         @if($errors->any())
                         <h4>{{$errors->first()}}</h4>
                         @endif
-                            <form action="{{ url('/loginSubmit') }}" method="post">
+
+                        <!-- <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#Public" class="active show">Public</a></li>
+                        <li><a data-toggle="tab" href="#MinistryLogin">Ministry</a></li>
+                        </ul> -->
+
+                        <div class="tab-content">
+                        <div id="Public" class="tab-pane fade active in show">
+                        <form action="{{ url('/loginPublic') }}" method="post">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <div class="form-group">
+                                    <label>Email Address</label>
+                                    <input class="au-input au-input--full" type="email" name="email" placeholder="Email">
+                                </div>
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input class="au-input au-input--full" type="password" name="password" placeholder="Password">
+                                </div>
+                                <div class="login-checkbox">
+                                    <label>
+                                        <input type="checkbox" name="remember">Remember Me
+                                    </label>
+                                    <!-- <label>
+                                        <a href="{{ url('/recover') }}">Forgotten Password?</a>
+                                    </label> -->
+                                </div>
+                                <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">sign in</button>
+                                <!-- <div class="social-login-content">
+                                    <div class="social-button">
+                                        <button class="au-btn au-btn--block au-btn--blue m-b-20">sign in with facebook</button>
+                                        <button class="au-btn au-btn--block au-btn--blue2">sign in with twitter</button>
+                                    </div>
+                                </div> -->
+                            </form>
+                            <div class="register-link">
+                                <p>
+                                    Don't you have account?
+                                    <a href="{{ url('/register') }}">Sign Up Here</a>
+                                </p>
+                            </div>
+                        </div>
+                        <div id="MinistryLogin" class="tab-pane fade">
+                        <form action="{{ url('/loginSubmit') }}" method="post">
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <div class="form-group">
                                     <label>Email Address</label>
@@ -93,6 +166,10 @@
                                     <a href="{{ url('/register') }}">Sign Up Here</a>
                                 </p>
                             </div>
+                        </div>
+
+
+
                         </div>
                     </div>
                 </div>

@@ -5,8 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Tymon\JWTAuth\Contracts\JWTSubject;
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable
 {
     use Notifiable;
 
@@ -16,9 +15,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'uID' , 'firstName' , 'middleName' , 'lastName' , 'emailID' , 'password_temp' , 'create_Time' , 'catID' , 'depID' , 'locID' , 
-        'status' , 'isEmailVerified' , 'activatedDateTime' , 'deactivatedDateTime' , 'updateDateTime' , 'catName' , 'department_name' , 
-        'location_name' , 'designation_name' , 'reportingUserID' , 'roleId' , 'password_temp'
+        'name', 'email', 'email_verified_at', 'password', 'remember_token', 'created_at', 'updated_at', 'is_verified','firstName', 'middleName', 'lastName', 'email', 'password', 'created_at', 'catID', 'depID', 'locID', 'status', 'isEmailVerified', 'activatedDateTime', 'deactivatedDateTime', 'updated_at', 'catName', 'department_name', 'location_name', 'designation_name', 'reportingUserID', 'roleId'
     ];
 
     /**
@@ -31,33 +28,11 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'activatedDateTime' => 'datetime',
-    ];
-
-    /**
      * table name.
      *
      * @var array
      */
-    protected $table = 'master_users';
 
-    public function getJWTIdentifier()
-    {
-        return $this->getKey();
-    }
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
-    public function getJWTCustomClaims()
-    {
-        return [];
-    }
+    protected $table = 'users';
 }
-    
+
