@@ -1,58 +1,22 @@
- <?php //echo "Satya";die; ?>
- <!DOCTYPE html>
-<html lang="en">
+@extends('layout.admin')
 
-<head>
-    <!-- Required meta tags-->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="au theme template">
-    <meta name="author" content="Hau Nguyen">
-    <meta name="keywords" content="au theme template">
+@section('title', 'Compliance Monitoring Dashboard')
 
-    <!-- Title Page-->
-    <title>MCA Compliance | Notice List</title>
-
-    @include('dashboard.header')
-
-</head>
-
-<body class="animsition">
-    <div class="page-wrapper">
-        <!-- HEADER MOBILE-->
-        <header class="header-mobile d-block d-lg-none">
-        @include('dashboard.sidebar')
-        </header>
-        <!-- END HEADER MOBILE-->
-
-        <!-- MENU SIDEBAR-->
-        <aside class="menu-sidebar d-none d-lg-block">
-        @include('dashboard.sidebar1')
-        </aside>
-        <!-- END MENU SIDEBAR-->
-
-        <!-- PAGE CONTAINER-->
-        <div class="page-container">
-            <!-- HEADER DESKTOP-->
-            <header class="header-desktop">
-            @include('dashboard.topheader')
-            </header>
-            <!-- END HEADER DESKTOP-->
-
+@section('content')
             <!-- MAIN CONTENT-->
             <div class="main-content">
                 <div class="section__content section__content--p30">
                     <div class="container-fluid">
+
                         <div class="row">
                             <div class="col-lg-12">
                             <div class="row">
                             <div class="col-sm-8">
                                 <div class="card" style="margin-top:-35px; margin-bottom:5px;">
                                     <div class="card-body card-block">
-                                        <form class="form-header" action="{{url('notice_roc/list')}}" method="GET">
+                                    <form class="form-header" action="{{url('provision_wise_notice/list')}}" method="GET">
                                             <input class="au-input col-sm-6" type="text" name="searchKey"  value="<?=$searchKey;?>"
                                             placeholder="Search for datas &amp; reports..." onkeyup = " ($(this).val() === '') ? this.form.submit() : '';">
-                                            <input type="hidden" name="roc" value="<?=$roc;?>">
                                             <input type="hidden" name="year" value="<?=$year;?>">
                                             <button class="au-btn--submit" type="submit"><i class="zmdi zmdi-search"></i></button>
                                         </form>
@@ -66,9 +30,7 @@
                                     </div>
                                 </div>
                             </div>
-                            </div>
-
-
+                        </div>
                         @if(session()->has('success'))
                             <div class="alert alert-success">
                                 {{ session()->get('success') }}
@@ -91,8 +53,7 @@
                                                 <th width="10%">S.No.</th>
                                                 <th width="20%">CIN</th>
                                                 <th width="40%">Company Name</th>
-                                                <th width="10%">RoC</th>
-                                                <!-- <th width="10%" class="text-right">FY</th> -->
+                                                <th width="10%" class="text-right">FY</th>
                                                 <th width="10%" class="text-right">Action</th>
                                                <!--   <th width="15%" class="text-right">Address</th>
                                                <th width="5%" class="text-right">Status</th>
@@ -100,7 +61,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-
                                         @foreach ($notice_data as $user)
 
                                             <tr>
@@ -111,9 +71,7 @@
                                                 <td>{{ $counter++ }}</td>
                                                 <td>{{ $user->cin }}</td>
                                                 <td>{{ $user->company_name }}</td>
-                                                <td>{{ $user->roc_name }}</td>
-
-                                                <!-- <td class="text-right">{{ $user->YearOfFilling }}</td> -->
+                                                <td class="text-right">{{ $user->YearOfFilling }}</td>
                                                 <td class="text-right"><a href="{{url('compliance_company/view?cin=')}}{{ $user->cin }}&year={{ $year }}" target="_blank"><i class="fa fa-table"></i></a></td>
                                             </tr>
 
@@ -127,23 +85,30 @@
                                 {{ $notice_data->appends([])->links() }}
                             </div>
                         </div>
-
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="copyright">
-                                    <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-    </div>
-
-    @include('dashboard.footer')
+<!-- Jquery JS-->
+<script src="{{asset('assets/CoolAdmin/vendor/jquery-3.2.1.min.js')}}"></script>
+<!-- Bootstrap JS-->
+<script src="{{asset('assets/CoolAdmin/vendor/bootstrap-4.1/popper.min.js')}}"></script>
+<script src="{{asset('assets/CoolAdmin/vendor/bootstrap-4.1/bootstrap.min.js')}}"></script>
+<!-- Vendor JS       -->
+<script src="{{asset('assets/CoolAdmin/vendor/slick/slick.min.js')}}">
+</script>
+<script src="{{asset('assets/CoolAdmin/vendor/wow/wow.min.js')}}"></script>
+<script src="{{asset('assets/CoolAdmin/vendor/animsition/animsition.min.js')}}"></script>
+<script src="{{asset('assets/CoolAdmin/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js')}}">
+</script>
+<script src="{{asset('assets/CoolAdmin/vendor/counter-up/jquery.waypoints.min.js')}}"></script>
+<script src="{{asset('assets/CoolAdmin/vendor/counter-up/jquery.counterup.min.js')}}">
+</script>
+<script src="{{asset('assets/CoolAdmin/vendor/circle-progress/circle-progress.min.js')}}"></script>
+<script src="{{asset('assets/CoolAdmin/vendor/perfect-scrollbar/perfect-scrollbar.js')}}"></script>
+<script src="{{asset('assets/CoolAdmin/vendor/chartjs/Chart.bundle.min.js')}}"></script>
+<script src="{{asset('assets/CoolAdmin/vendor/select2/select2.min.js')}}"></script>
+<!-- Main JS-->
+<script src="{{asset('assets/CoolAdmin/js/main.js')}}"></script>
 <script>
     $('.close').click(function(){
         var checkstr =  confirm('are you sure you want to delete this?');
@@ -154,7 +119,4 @@
         }
     });
 </script>
-</body>
-
-</html>
-<!-- end document-->
+@endsection

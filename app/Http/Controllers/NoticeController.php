@@ -69,4 +69,9 @@ class NoticeController extends Controller
 
         // return view('notice.index',['notice_data'=>$notice_data, 'provision_id' => $provision_id,'status' => $status, 'year' => $year]);
     }
+    public function report()
+    {
+        return view('notice.report',['notice_data'=>$notice_data, 'provision_id' => $provision_id,'status' => $status, 'year' => $year,'total'=>$total, 'counter'=>$counter,'searchKey' => $request->input('searchKey')]);
+
+    }
 }

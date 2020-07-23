@@ -276,7 +276,7 @@ section {
 .page-wrapper {
     overflow: hidden;
     background: #e5e5e5;
-    padding-bottom: 8vh;
+    /*padding-bottom: 8vh;*/
 }
 
 @media (max-width: 991px) {
@@ -488,7 +488,7 @@ section {
 }
 
 .au-btn--green {
-    background: #63c76a;
+    background: #5642d7;
 }
 
 .au-btn--green:hover {
@@ -3264,11 +3264,11 @@ section {
     -webkit-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
     -moz-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
     box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.1);
-    padding: 40px;
+    padding: 20px;
     padding-right: 35px;
-    -webkit-border-radius: 10px;
+    /*-webkit-border-radius: 10px;
     -moz-border-radius: 10px;
-    border-radius: 10px;
+    border-radius: 10px;*/
     background: #fff;
     overflow: hidden;
 }
@@ -4047,8 +4047,8 @@ section {
 }
 
 .recent-report {
-    padding-bottom: 65px;
-    margin-bottom: 60px;
+    padding-bottom: 35px;
+    margin-bottom: 25px;
 }
 
 .chart-info {
@@ -4109,8 +4109,8 @@ section {
 }
 
 .chart-percent-card {
-    margin-bottom: 60px;
-    padding-top: 47px;
+    margin-bottom: 30px;
+    padding-top: 27px;
 }
 
 .chart-percent-card .chart-note {
@@ -4744,6 +4744,10 @@ section {
 }
 
 /* ----- Footer ----- */
+footer{
+	background-color:#bab2ed;
+}
+
 .copyright {
     text-align: center;
     padding: 60px 0;
@@ -4752,7 +4756,7 @@ section {
 
 .copyright p {
     font-size: 14px;
-    color: #666;
+    color: #fff;
     line-height: -webkit-calc(24/14);
     line-height: -moz-calc(24/14);
     line-height: calc(24/14);
@@ -14657,4 +14661,10 @@ section {
 .loader
 {
     background-image: '../images/Preloader-1.gif';
+}
+.btn-primary_new
+{
+	color: #fff;
+	background-color: #5642d7;
+	border-color: #5642d7;
 }

@@ -1,12 +1,10 @@
 <?php
-
-
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller as Controller;
 //use App\Home;
 use Validator, DB, Hash;
-class NoticeInspectorController extends Controller
+class InspectorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,6 +13,7 @@ class NoticeInspectorController extends Controller
      */
     public function index(Request $request)
     {
+
         $search_key = '';
         DB::enableQueryLog();
         $inspector  = $request->input('inspector');
@@ -59,6 +58,6 @@ class NoticeInspectorController extends Controller
         // echo "<pre>";
         // print_r($query);
         // die;
-        return view('inspector_wise_notice.index',['notice_data'=>$notice_data, 'total'=>$total,'counter'=>$counter,'year'=>$year, 'inspector'=>$inspector, 'searchKey' => $request->input('searchKey')]);
+        return view('inspector.index',['notice_data'=>$notice_data, 'total'=>$total,'counter'=>$counter,'year'=>$year, 'inspector'=>$inspector, 'searchKey' => $request->input('searchKey')]);
     }
 }

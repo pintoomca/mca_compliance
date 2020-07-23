@@ -1,8 +1,38 @@
-            @extends('layout.admin')
 
-            @section('title', 'Compliance Monitoring Dashboard')
 
-            @section('content')
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!-- Required meta tags-->
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <meta name="description" content="au theme template">
+      <meta name="author" content="Hau Nguyen">
+      <meta name="keywords" content="au theme template">
+      <!-- Title Page-->
+      <title>Dashboard</title>
+      @include('dashboard.header')
+   </head>
+   <body class="animsition ">
+      <div class="page-wrapper">
+         <!-- HEADER MOBILE-->
+         <header class="header-mobile d-block d-lg-none">
+            @include('dashboard.sidebar')
+         </header>
+         <!-- END HEADER MOBILE-->
+         <!-- MENU SIDEBAR-->
+         <aside class="menu-sidebar d-none d-lg-block">
+            @include('dashboard.sidebar1')
+         </aside>
+         <!-- END MENU SIDEBAR-->
+         <!-- PAGE CONTAINER-->
+         <div class="page-container">
+            <!-- HEADER DESKTOP-->
+            <header class="header-desktop">
+               @include('dashboard.topheader')
+            </header>
+            <!-- HEADER DESKTOP-->
+            <!-- MAIN CONTENT-->
             <div class="main-content loader" style="padding-top:60px !important;">
                <div class="section__content section__content--p30">
                   <div class="container-fluid">
@@ -11,9 +41,9 @@
                            <button type="button" class="btn btn-primary_new btn-sm ad-search" id="search_btn_s" onclick="$('.ad-search-form').slideDown();$('#search_btn_s').hide();$('#search_btn_h').show();" style="margin-bottom:10px;"><i class="fa fa-arrow-down"></i>&nbsp; Advance Search</button>
                            <button type="button" style="display:none;" class="btn btn-primary_new btn-sm ad-search" id="search_btn_h" onclick="$('.ad-search-form').slideUp();$('#search_btn_s').show();$('#search_btn_h').hide();" style="margin-bottom:10px;"><i class="fa fa-arrow-up"></i>&nbsp; Hide Search</button>
                         </div> -->
-                        <div class="col-sm-12 ad-search-form " style="margin-top:-10px;">
-                           <div class="card au-card" style="padding-bottom:10xp;!important">
-                              <div class="card-body card-block" >
+                        <div class="col-sm-12 ad-search-form " style="margin-top:-20px;">
+                           <div class="card au-card" >
+                              <div class="card-body card-block">
                                  <form class="form-horizontal" action="{{url('company/list')}}" method="GET" target="_blank">
                                     <div class="row form-group">
                                        <div class="col-4">
@@ -220,30 +250,20 @@
                   </div>
                </div>
             </div>
-   <!-- Jquery JS-->
-   <script src="{{asset('assets/CoolAdmin/vendor/jquery-3.2.1.min.js')}}"></script>
-    <!-- Bootstrap JS-->
-    <script src="{{asset('assets/CoolAdmin/vendor/bootstrap-4.1/popper.min.js')}}"></script>
-    <script src="{{asset('assets/CoolAdmin/vendor/bootstrap-4.1/bootstrap.min.js')}}"></script>
-    <!-- Vendor JS       -->
-    <script src="{{asset('assets/CoolAdmin/vendor/slick/slick.min.js')}}">
-    </script>
-    <script src="{{asset('assets/CoolAdmin/vendor/wow/wow.min.js')}}"></script>
-    <script src="{{asset('assets/CoolAdmin/vendor/animsition/animsition.min.js')}}"></script>
-    <script src="{{asset('assets/CoolAdmin/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js')}}">
-    </script>
-    <script src="{{asset('assets/CoolAdmin/vendor/counter-up/jquery.waypoints.min.js')}}"></script>
-    <script src="{{asset('assets/CoolAdmin/vendor/counter-up/jquery.counterup.min.js')}}">
-    </script>
-    <script src="{{asset('assets/CoolAdmin/vendor/circle-progress/circle-progress.min.js')}}"></script>
-    <script src="{{asset('assets/CoolAdmin/vendor/perfect-scrollbar/perfect-scrollbar.js')}}"></script>
-    <script src="{{asset('assets/CoolAdmin/vendor/chartjs/Chart.bundle.min.js')}}"></script>
-    <script src="{{asset('assets/CoolAdmin/vendor/select2/select2.min.js')}}">
-    </script>
-
-    <!-- Main JS-->
-    <script src="{{asset('assets/CoolAdmin/js/main.js')}}"></script>
-    <script src="{{asset('assets/CoolAdmin/highchart_cms/highcharts.js')}}"></script>
+            <!-- END MAIN CONTENT-->
+            <div class="row">
+               <div class="col-md-12">
+                  <div class="copyright">
+                     <p>Copyright © 2018 Colorlib. All rights reserved. <a href="#">MCA CDM</a>.</p>
+                  </div>
+               </div>
+            </div>
+            <!-- END PAGE CONTAINER-->
+         </div>
+      </div>
+      @include('dashboard.footer');
+   </body>
+   <script src="{{asset('assets/CoolAdmin/highchart_cms/highcharts.js')}}"></script>
    <script src="{{asset('assets/CoolAdmin/highchart_cms/highcharts-3d.js')}}"></script>
    <script src="{{asset('assets/CoolAdmin/highchart_cms/highcharts-more.js')}}"></script>
    <script src="{{asset('assets/CoolAdmin/highchart_cms/exporting.js')}}"></script>
@@ -768,5 +788,6 @@
               }]
       });
    </script>
+</html>
+<!-- end document-->
 
-@endsection

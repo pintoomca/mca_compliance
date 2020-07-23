@@ -49,7 +49,7 @@ li a {
 .tab-content{
 background: #fdfdfd;
   line-height: 25px;
-  border: 1px solid #63c76a;
+  border: 1px solid #ebe9f7;
   padding:30px 25px;
 }
 
@@ -58,7 +58,7 @@ li a:focus, */
 li a.active
 {
 border: none;
-  background: #63c76a;
+  background: #5642d7;
   color:#fff;
   border-radius:0;
   transition:background 0.20s linear;

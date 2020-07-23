@@ -1,43 +1,8 @@
- <?php //echo "Satya";die; ?>
- <!DOCTYPE html>
-<html lang="en">
+@extends('layout.admin')
 
-<head>
-    <!-- Required meta tags-->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="au theme template">
-    <meta name="author" content="Hau Nguyen">
-    <meta name="keywords" content="au theme template">
+@section('title', 'Compliance Monitoring Dashboard')
 
-    <!-- Title Page-->
-    <title>MCA Compliance | Notice List</title>
-
-    @include('dashboard.header')
-
-</head>
-
-<body class="animsition">
-    <div class="page-wrapper">
-        <!-- HEADER MOBILE-->
-        <header class="header-mobile d-block d-lg-none">
-        @include('dashboard.sidebar')
-        </header>
-        <!-- END HEADER MOBILE-->
-
-        <!-- MENU SIDEBAR-->
-        <aside class="menu-sidebar d-none d-lg-block">
-        @include('dashboard.sidebar1')
-        </aside>
-        <!-- END MENU SIDEBAR-->
-
-        <!-- PAGE CONTAINER-->
-        <div class="page-container">
-            <!-- HEADER DESKTOP-->
-            <header class="header-desktop">
-            @include('dashboard.topheader')
-            </header>
-            <!-- END HEADER DESKTOP-->
+@section('content')
 
             <!-- MAIN CONTENT-->
             <div class="main-content">
@@ -121,23 +86,30 @@
                                 {{ $notice_data->appends([])->links() }}
                             </div>
                         </div>
-
-
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="copyright">
-                                    <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-    </div>
-
-    @include('dashboard.footer')
+               <!-- Jquery JS-->
+<script src="{{asset('assets/CoolAdmin/vendor/jquery-3.2.1.min.js')}}"></script>
+<!-- Bootstrap JS-->
+<script src="{{asset('assets/CoolAdmin/vendor/bootstrap-4.1/popper.min.js')}}"></script>
+<script src="{{asset('assets/CoolAdmin/vendor/bootstrap-4.1/bootstrap.min.js')}}"></script>
+<!-- Vendor JS       -->
+<script src="{{asset('assets/CoolAdmin/vendor/slick/slick.min.js')}}">
+</script>
+<script src="{{asset('assets/CoolAdmin/vendor/wow/wow.min.js')}}"></script>
+<script src="{{asset('assets/CoolAdmin/vendor/animsition/animsition.min.js')}}"></script>
+<script src="{{asset('assets/CoolAdmin/vendor/bootstrap-progressbar/bootstrap-progressbar.min.js')}}">
+</script>
+<script src="{{asset('assets/CoolAdmin/vendor/counter-up/jquery.waypoints.min.js')}}"></script>
+<script src="{{asset('assets/CoolAdmin/vendor/counter-up/jquery.counterup.min.js')}}">
+</script>
+<script src="{{asset('assets/CoolAdmin/vendor/circle-progress/circle-progress.min.js')}}"></script>
+<script src="{{asset('assets/CoolAdmin/vendor/perfect-scrollbar/perfect-scrollbar.js')}}"></script>
+<script src="{{asset('assets/CoolAdmin/vendor/chartjs/Chart.bundle.min.js')}}"></script>
+<script src="{{asset('assets/CoolAdmin/vendor/select2/select2.min.js')}}"></script>
+<!-- Main JS-->
+<script src="{{asset('assets/CoolAdmin/js/main.js')}}"></script>
 <script>
     $('.close').click(function(){
         var checkstr =  confirm('are you sure you want to delete this?');
@@ -148,7 +120,5 @@
         }
     });
 </script>
-</body>
+@endsection
 
-</html>
-<!-- end document-->

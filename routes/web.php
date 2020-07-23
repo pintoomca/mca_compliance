@@ -54,12 +54,18 @@ Route::middleware(['auth','web'])->group(function () {
     Route::get('/dashboard', 'DashboardController@index');
     //Notice
     Route::get('notice/list', 'NoticeController@index');
-    Route::get('notice_roc/list', 'NoticeRocController@index');
-    Route::get('provision_wise_notice/list', 'ProvisionWiseNoticeController@index');
+    Route::get('notice_roc/list', 'RocController@index');
+    Route::get('provision_wise_notice/list', 'ProvisionController@index');
     Route::get('provision_wise_company/list', 'ProvisionWiseCompanyController@index');
-    Route::get('inspector_wise_notice/list', 'NoticeInspectorController@index');
+    Route::get('inspector_wise_notice/list', 'InspectorController@index');
     Route::get('compliance_company/view', 'ComplianceCompanyController@index');
     Route::get('compliance_mail/view', 'ComplianceCompanyController@mailView');
+
+    Route::get('inspector-wise-report', 'InspectorController@report');
+    Route::get('provision-wise-report', 'ProvisionController@report');
+    Route::get('year-wise-report', 'NoticeController@report');
+    Route::get('roc-wise-report', 'RocController@report');
+
     Route::get('company/list', 'CompanyController@index');
     Route::get('company/view', 'CompanyController@view');
 });
