@@ -36,26 +36,29 @@ class DashboardController extends Controller
     public function dashboardAdmin($request)
     {
         $curr_year = ($request->input('year') != '') ? $request->input('year'):'2017';
-
+        //DB::enableQueryLog();
         //Get company count Inspector-wise
-        $comp_data = DB::table('tble_email_sent')
-        ->join('tble_inspector_details', 'tble_email_sent.rocCode', '=', 'tble_inspector_details.rocCode')
-        ->join('master_users', 'tble_inspector_details.userID', '=', 'master_users.uID')
-        ->select(DB::raw('count(distinct CIN) as _count, tble_email_sent.uID, master_users.firstName, tble_inspector_details.firstName as fName,YearOfFilling'))
-        ->whereRaw("tble_inspector_details.deptID=2 and tble_inspector_details.catID=50 and master_users.uID IN (383,384,385,386,387, 388, 389) and YearOfFilling=$curr_year")
-        ->groupBy('tble_email_sent.uID')
-        ->groupBy('master_users.firstName')
-        ->groupBy('tble_inspector_details.firstName')
-        ->get();
+        $query = "select group_concat(_count) as cnt, group_concat(action) as action, group_concat(status) as status, firstName, fName,
+        YearOfFilling from cmp_inspector_status_report
+        where `YearOfFilling` = $curr_year group by firstName, fName";
+        $comp_data = DB::select($query);
+        // echo "<pre>";
+        // print_r($comp_data);
+        // die;
         $inspector_names = [];
         $comp_count = [];
+        $n_count =[];
+        $n_name = [];
         foreach($comp_data as $rec)
         {
             $inspector_names[] = $rec->firstName." ( ".$rec->fName." )";
-            $comp_count[] =  $rec->_count;
+            $n_count[] =explode(",",$rec->cnt);
+            $n_name[] =explode(",",$rec->action);
         }
-        $data = ['inspector_names'=>$inspector_names,'inspector_comp_count'=>json_encode($comp_count), 'year' =>$curr_year];
-
+        $data = ['inspector_names'=>$inspector_names, 'year' =>$curr_year ];
+        // dd(
+        //     DB::getQueryLog()
+        // );
        //Get company count provision-wise
        $comp_data = DB::table('tble_provision_master_final_set')
        ->select(DB::raw('count(*) as _count,  provision_id, YearOfFiling'))

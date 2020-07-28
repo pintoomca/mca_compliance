@@ -46,12 +46,6 @@ li a {
   text-decoration: none;
 }
 
-.tab-content{
-background: #fdfdfd;
-  line-height: 25px;
-  border: 1px solid #ebe9f7;
-  padding:30px 25px;
-}
 
 /* li a:hover,
 li a:focus, */
@@ -63,10 +57,32 @@ border: none;
   border-radius:0;
   transition:background 0.20s linear;
 }
+.login-form input, .login-form input[type="checkbox"]{
+    border:3px solid #e5e5e5;
+}
+.page-content--bge5 {
+    background: #efedfc;
+    height: 100vh;
+}
+.login-content{
+    box-shadow:
+  0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+  0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+  0 12.5px 10px rgba(0, 0, 0, 0.06),
+  0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+  0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+  0 100px 80px rgba(0, 0, 0, 0.12)
+;
+}
+.login-form input:focus {
+    border:3px solid #5642d7;
+    color:black;
+    font-weight:700;
+}
 </style>
 </head>
 
-<body class="animsition">
+<body >
     <div class="page-wrapper">
         <div class="page-content--bge5">
             <div class="container">
@@ -126,12 +142,12 @@ border: none;
                                     </div>
                                 </div> -->
                             </form>
-                            <div class="register-link">
+                            <!-- <div class="register-link">
                                 <p>
                                     Don't you have account?
                                     <a href="{{ url('/register') }}">Sign Up Here</a>
                                 </p>
-                            </div>
+                            </div> -->
                         </div>
                         <div id="MinistryLogin" class="tab-pane fade">
                         <form action="{{ url('/loginSubmit') }}" method="post">

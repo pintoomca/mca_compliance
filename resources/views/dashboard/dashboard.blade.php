@@ -85,6 +85,7 @@
                                     <div class="au-card recent-report">
                                        <div class="au-card-inner">
                                           <figure class="highcharts-figure" style="max-width:1200px;">
+                                          <div id="container_first"></div>
                                              <div id="container_chart2"></div>
                                           </figure>
                                        </div>
@@ -407,104 +408,7 @@
       }]
       });
    </script>
-   <script>
-      $('#container_chart2').highcharts({
 
-          chart: {
-              type: 'column',
-              options3d: {
-                  enabled: true,
-                  alpha: 15,
-                  beta: 15,
-                  depth: 50,
-                  viewDistance: 25
-              }
-
-          },
-          // colors: [
-          //     '#FFC400',
-          //     '#FF5627',
-          //     '#B12C4B',
-          //     '#00B32C',
-          // ],
-          plotOptions: {
-              series: {
-                  cursor: 'pointer',
-                  colorByPoint: true,
-                  point: {
-                      events: {
-                          click: function () {
-                              //location.href = 'rangespent.php?year=FY+2016-17&category='+this.category;
-
-                              $url =  'inspector_wise_notice/list?year={{$year}}&inspector='+this.category;
-
-                              window.open($url, '_blank');
-                          }
-                      }
-                  },
-                  dataLabels: {
-                      enabled: true,
-                      style: {
-                          textOutline: false,
-                      },
-                  },
-              },
-              column: {
-                  grouping: false,
-                  shadow: false,
-                  borderWidth: 0
-              }
-          },
-          xAxis: {
-              title:{text:'Inspector Names'},
-              categories: <?php echo json_encode($inspector_names); ?>,
-
-          },
-          legend: {
-              enabled : false,
-              formatter: function() {
-                  var sliceIndex = this.point.index;
-                  var sliceName = this.series.chart.axes[0].categories[sliceIndex];
-                  return '<b>' + this.x + '</b> ' ;
-              },
-
-          },
-          title: {
-              text: 'Inspector wise notice sent : {{$year}}'
-          },
-          credits: {enabled : false},
-
-          subtitle: {
-              text: ''
-          },
-          yAxis: {
-              labels: {
-                  formatter: function () {
-                      return this.value;
-                  }
-              },
-              min: 0,
-              title: {
-                  text: 'No. of Companies'
-              }
-          },
-          tooltip: {
-              shared: true
-          },
-          series: [
-              {
-                  name: 'No. of Companies',
-                  type: 'column',
-                  data: {{ $inspector_comp_count }},
-                  // color: 'rgba(165,170,217,1)',
-                  pointPadding: 0.1,
-                  // pointPlacement: 0,
-                  tooltip: {
-                      valueSuffix: ''
-                  }
-              }]
-      });
-   </script>
    <script>
       Highcharts.chart('container_chart1', {
 
@@ -767,6 +671,85 @@
                   }
               }]
       });
+
+    //First Chart
+
+
+
+    Highcharts.chart('container_first', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: 'Inspectors'
+    },
+    xAxis: {
+        categories: <?php echo json_encode($inspector_names); ?>
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Total fruit consumption'
+        },
+        stackLabels: {
+            enabled: true,
+            style: {
+                fontWeight: 'bold',
+                color: ( // theme
+                    Highcharts.defaultOptions.title.style &&
+                    Highcharts.defaultOptions.title.style.color
+                ) || 'gray'
+            }
+        }
+    },
+    legend: {
+        align: 'right',
+        x: -30,
+        verticalAlign: 'top',
+        y: 25,
+        floating: true,
+        backgroundColor:
+            Highcharts.defaultOptions.legend.backgroundColor || 'white',
+        borderColor: '#CCC',
+        borderWidth: 1,
+        shadow: false
+    },
+    tooltip: {
+        headerFormat: '<b>{point.x}</b><br/>',
+        pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+    },
+    plotOptions: {
+        column: {
+            stacking: 'normal',
+            dataLabels: {
+                enabled: true
+            }
+        }
+    },
+    series: [{
+        name: 'John',
+        data: [5, 3, 4, 7, 2]
+    }, {
+        name: 'Jane',
+        data: [2, 2, 3, 2, 1]
+    }, {
+        name: 'Joe',
+        data: [3, 4, 4, 2, 5]
+    }, {
+        name: 'Joe1',
+        data: [3, 4, 4, 2, 5]
+    }, {
+        name: 'Joe2',
+        data: [3, 4, 4, 2, 5]
+    }, {
+        name: 'Joe3',
+        data: [3, 4, 4, 2, 5]
+    }, {
+        name: 'Joe4',
+        data: [3, 4, 4, 2]
+    }
+]
+});
    </script>
 
 @endsection
