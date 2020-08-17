@@ -42,20 +42,22 @@ class DashboardController extends Controller
         YearOfFilling from cmp_inspector_status_report
         where `YearOfFilling` = $curr_year group by firstName, fName";
         $comp_data = DB::select($query);
-        // echo "<pre>";
-        // print_r($comp_data);
-        // die;
+
         $inspector_names = [];
         $comp_count = [];
-        $n_count =[];
-        $n_name = [];
+        $meta_name = [];
         foreach($comp_data as $rec)
         {
             $inspector_names[] = $rec->firstName." ( ".$rec->fName." )";
-            $n_count[] =explode(",",$rec->cnt);
-            $n_name[] =explode(",",$rec->action);
+            $notice_counts =explode(",",$rec->cnt);
+            $meta_names =explode(",",$rec->action);
+            $meta_name['No Action'][] = (isset($notice_counts[0]))?$notice_counts[0]:'0';
+            $meta_name['Notice Sent'][] = (isset($notice_counts[1]))?$notice_counts[1]:'0';
+            $meta_name['Drop Charges'][] = (isset($notice_counts[2]))?$notice_counts[2]:'0';
+            $meta_name['Subject to Prosecution'][] = (isset($notice_counts[3]))?$notice_counts[3]:'0';
+            $meta_name['Further Examination Required.'][] = (isset($notice_counts[4]))?$notice_counts[4]:'0';
         }
-        $data = ['inspector_names'=>$inspector_names, 'year' =>$curr_year ];
+        $data = ['inspector_names'=>$inspector_names, 'meta_name'=>$meta_name,'year' =>$curr_year ];
         // dd(
         //     DB::getQueryLog()
         // );

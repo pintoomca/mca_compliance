@@ -51,7 +51,7 @@ Route::middleware(['auth','web'])->group(function () {
 
 
     //Dashboard
-    Route::get('/dashboard', 'DashboardController@index');
+    Route::get('dashboard', 'DashboardController@index');
     //Notice
     Route::get('notice/list', 'NoticeController@index');
     Route::get('notice_roc/list', 'RocController@index');

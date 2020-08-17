@@ -70,7 +70,7 @@
                      <div class="default-tab">
                         <nav>
                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                              <a class="nav-item nav-link active show" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true" title="Show Cause Notice Trace">SCN</a>
+                              <!-- <a class="nav-item nav-link active show" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true" title="Show Cause Notice Trace">SCN</a> -->
                               <a class="nav-item nav-link <?=($_REQUEST['year'] == '2017')?'active':'';?>" id="nav-fy1617-tab" data-toggle="tab" href="{{url('dashboard?year=2017')}}" role="tab" aria-controls="nav-fy1617" aria-selected="false">Compliance FY 2016-17</a>
                               <a class="nav-item nav-link <?=($_REQUEST['year'] == '2018')?'active':'';?>" id="nav-fy1718-tab" data-toggle="tab" href="#nav-fy1718" role="tab" aria-controls="nav-fy1718" aria-selected="false">Compliance FY 2017-18</a>
                               <a class="nav-item nav-link <?=($_REQUEST['year'] == '2019')?'active':'';?>" id="nav-fy1819-tab" data-toggle="tab" href="#nav-fy1819" role="tab" aria-controls="nav-fy1819" aria-selected="false">Compliance FY 2018-19</a>
@@ -145,10 +145,10 @@
                               </div>
                               <div class="row">
                                  <div class="col-lg-12">
-                                    <div class="table-responsive table--no-card m-b-40">
-                                       <table class="table table-borderless table-earning" style="background-color:#fff;">
+                                    <div class="table-responsive">
+                                       <table class="table table-borderless" style="background-color:#fff;">
                                           <thead>
-                                             <tr>
+                                             <tr class="table-primary">
                                                 <th class="text-center">Provision</th>
                                                 <?php foreach($notice_status['notice_actions'] as $v){?>
                                                 <th class="text-center"><?php echo $v?></th>
@@ -157,9 +157,9 @@
                                           </thead>
                                           <tbody>
                                              <?php
-                                                foreach($notice_status['notice_counts'] as $k=>$v){ ?>
+                                            foreach($notice_status['notice_counts'] as $k=>$v){ ?>
                                              <tr>
-                                                <td class="text-center"><?=$k;?></td>
+                                                <td class="text-center table-secondary"><?=$k;?></td>
                                                 <td class="text-center">
                                                    <div class="text-center">
                                                       <span>
@@ -169,7 +169,7 @@
                                                       </span>
                                                    </div>
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center  table-success">
                                                    <div class="text-center">
                                                       <span>
                                                       <?php if(isset($v[2])){ ?>
@@ -178,7 +178,7 @@
                                                       </span>
                                                    </div>
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center table-info">
                                                    <div class="text-center">
                                                       <span>
                                                       <?php if(isset($v[3])){ ?>
@@ -187,7 +187,16 @@
                                                       </span>
                                                    </div>
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center table-danger">
+                                                   <div class="text-center">
+                                                      <span>
+                                                      <?php if(isset($v[4])){ ?>
+                                                      <a href="{{ url('notice/list?provision_id='.$k.'&status=3') }}&year={{$year}}" target="_blank"><?php echo $v[4];?></a>
+                                                      <?php } else { echo '-'; } ?>
+                                                      </span>
+                                                   </div>
+                                                </td>
+                                                <td class="text-center table-warning">
                                                    <div class="text-center">
                                                       <span>
                                                       <?php if(isset($v[0])){ ?>
@@ -579,13 +588,13 @@
 
           chart: {
               type: 'column',
-              options3d: {
-                  enabled: true,
-                  alpha: 15,
-                  beta: 15,
-                  depth: 50,
-                  viewDistance: 25
-              }
+            //   options3d: {
+            //       enabled: true,
+            //       alpha: 15,
+            //       beta: 15,
+            //       depth: 50,
+            //       viewDistance: 25
+            //   }
           },
           // colors: [
           //     '#FFC400',
@@ -683,6 +692,7 @@
     title: {
         text: 'Inspectors'
     },
+    credits: {enabled : false},
     xAxis: {
         categories: <?php echo json_encode($inspector_names); ?>
     },
@@ -726,28 +736,35 @@
             }
         }
     },
-    series: [{
-        name: 'John',
-        data: [5, 3, 4, 7, 2]
-    }, {
-        name: 'Jane',
-        data: [2, 2, 3, 2, 1]
-    }, {
-        name: 'Joe',
-        data: [3, 4, 4, 2, 5]
-    }, {
-        name: 'Joe1',
-        data: [3, 4, 4, 2, 5]
-    }, {
-        name: 'Joe2',
-        data: [3, 4, 4, 2, 5]
-    }, {
-        name: 'Joe3',
-        data: [3, 4, 4, 2, 5]
-    }, {
-        name: 'Joe4',
-        data: [3, 4, 4, 2]
-    }
+    series: [
+    // {
+    //     name: 'John',
+    //     data: [5, 3, 4, 7, 2]
+    // }, {
+    //     name: 'Jane',
+    //     data: [2, 2, 3, 2, 1]
+    // }, {
+    //     name: 'Joe',
+    //     data: [3, 4, 4, 2, 5]
+    // }, {
+    //     name: 'Joe1',
+    //     data: [3, 4, 4, 2, 5]
+    // }, {
+    //     name: 'Joe2',
+    //     data: [3, 4, 4, 2, 5]
+    // }, {
+    //     name: 'Joe3',
+    //     data: [3, 4, 4, 2, 5]
+    // }, {
+    //     name: 'Joe4',
+    //     data: [3, 4, 4, 2]
+    // }
+    <?php  foreach($meta_name as $k=>$v){ ?>
+      {
+      name: '<?php echo $k; ?>',
+      data: <?php echo json_encode($v,JSON_NUMERIC_CHECK); ?>
+      },
+    <?php } ?>
 ]
 });
    </script>

@@ -6,7 +6,7 @@
             <div class="menu-sidebar__content js-scrollbar1">
                 <nav class="navbar-sidebar">
                     <ul class="list-unstyled navbar__list">
-                        <li class="active has-sub">
+                        <li class="@if(Request::is('dashboard*')) active @endif has-sub">
                             <a class="js-arrow" href="{{url('/dashboard?year=2017')}}">
                                 <i class="fas fa-tachometer-alt"></i>Dashboard</a>
                             <!-- <ul class="list-unstyled navbar__sub-list js-sub-list">
@@ -25,23 +25,23 @@
                             </ul> -->
                         </li>
 
-                        <li>
+                        <li class="<?php echo (Request::is('inspector-wise-report')?'active':'');?>">
                             <a href="{{url('/inspector-wise-report')}}">
                                 <i class="fas fa-chart-bar"></i>Inspector Wise Report</a>
                         </li>
-                        <li>
+                        <li class="<?php echo (Request::is('provision-wise-report')?'active':'');?>">
                             <a href="{{url('/provision-wise-report')}}">
                                 <i class="fas fa-chart-bar"></i>Provision Wise Report</a>
                         </li>
-                        <li>
+                        <li class="<?php echo (Request::is('year-wise-report')?'active':'');?>">
                             <a href="{{url('/year-wise-report')}}">
                                 <i class="fas fa-chart-bar"></i>Year Wise Report</a>
                         </li>
-                        <li>
+                        <li class="<?php echo (Request::is('roc-wise-report')?'active':'');?>">
                             <a href="{{url('/roc-wise-report')}}">
                                 <i class="fas fa-chart-bar"></i>RoC Wise Report</a>
                         </li>
-                        <li>
+                        <li class="<?php echo (Request::is('provision-wiki')?'active':'');?>">
                             <a href="{{url('/provision-wiki')}}">
                                 <i class="fas fa-book"></i>Provision Wiki</a>
                         </li>

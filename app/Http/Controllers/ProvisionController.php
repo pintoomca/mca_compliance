@@ -53,9 +53,77 @@ class ProvisionController extends Controller
         // die;
         return view('provision.index',['notice_data'=>$notice_data, 'total'=>$total,'counter'=>$counter,'provisionId'=>$provisionId, 'year'=>$year,'searchKey' => $request->input('searchKey')]);
     }
-    public function report()
+    public function report(Request $request)
     {
-        return view('provision.report',['notice_data'=>$notice_data, 'total'=>$total,'counter'=>$counter,'provisionId'=>$provisionId, 'year'=>$year,'searchKey' => $request->input('searchKey')]);
+        $curr_year = ($request->input('year') != '') ? $request->input('year'):'2017';
+        // Provision wise email sent
+        $query = "select count(*) as _count,  provision_id from tble_provision_master_final_set
+         group by provision_id";
+        $comp_data = DB::select($query);
 
+        $query = "SELECT COUNT(*) AS _count, provisionId, t3.roc_name, t3.roc_code,YearOfFilling FROM  tble_email_sent AS t2
+        JOIN tble_roc_name_map AS t3 ON  t2.rocCode= t3.roc_code
+        GROUP BY provisionId, t3.roc_name,t3.roc_code,YearOfFilling";
+        $r_data = DB::select($query);
+        $roc_data = [];
+        $provision_id = '';
+        foreach($r_data as $k=>$rdata)
+        {
+             if($rdata->provisionId != $provision_id)
+             {
+                $provision_id =$rdata->provisionId;
+                $roc_data[$provision_id][] = ['_count'=>$rdata->_count,'roc_name'=>$rdata->roc_name, 'roc_code'=>$rdata->roc_code];
+             }
+             else{
+                $roc_data[$provision_id][] = ['_count'=>$rdata->_count,'roc_name'=>$rdata->roc_name, 'roc_code'=>$rdata->roc_code];
+             }
+        }
+
+        $query = "select count(*) as _count, YearOfFiling, provision_id from tble_provision_master_final_set
+        group by YearOfFiling,provision_id";
+        $y_data = DB::select($query);
+
+        $year_data = [];
+        $provision_id = '';
+        foreach($y_data as $k=>$rdata)
+        {
+             if($rdata->provision_id != $provision_id)
+             {
+                $provision_id =$rdata->provision_id;
+                $year_data[$provision_id][] = ['_count'=>$rdata->_count, 'YearOfFiling'=>$rdata->YearOfFiling];
+             }
+             else{
+                $year_data[$provision_id][] = ['_count'=>$rdata->_count, 'YearOfFiling'=>$rdata->YearOfFiling];
+             }
+        }
+        //Company Type(Private, Public)
+        $query = "SELECT sum(_count) as count, COMPANY_CLASS, provision_id FROM cmp_prvoision_company_class
+        group by provision_id, COMPANY_CLASS";
+        $y_data = DB::select($query);
+
+        // $comp_type_data = [];
+        // $provision_id = '';
+        // foreach($y_data as $k=>$rdata)
+        // {
+        //      if($rdata->provision_id != $provision_id)
+        //      {
+        //         $provision_id =$rdata->provision_id;
+        //         $comp_type_data[$provision_id][] = ['_count'=>$rdata->_count, 'YearOfFiling'=>$rdata->YearOfFiling];
+        //      }
+        //      else{
+        //         $comp_type_data[$provision_id][] = ['_count'=>$rdata->_count, 'YearOfFiling'=>$rdata->YearOfFiling];
+        //      }
+        // }
+
+        $chart_data = [];
+        foreach($comp_data as $k=>$row)
+        {
+            $chart_data[$k]['_count'] = $row->_count;
+            $chart_data[$k]['provision_id'] = $row->provision_id;
+            $chart_data[$k]['year_wise'] = (!empty($year_data[$row->provision_id]))?$year_data[$row->provision_id]:[];
+            $chart_data[$k]['roc_wise'] = (!empty($roc_data[$row->provision_id]))?$roc_data[$row->provision_id]:[];
+        }
+        $data = ['chart_data'=>$chart_data];
+        return view('provision.report', $data);
     }
 }
