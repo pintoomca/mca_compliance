@@ -32,7 +32,7 @@
 
                                                 <div id="collapse{{$counter}}" class="collapse <?php echo (($counter > 1)?'':'show');?> " aria-labelledby="heading{{$counter}}" data-parent="#accordion">
                                                 <div class="card-body">
-                                                <button type="button" class="btn btn-info">Total Comapnies : {{$rec['_count']}}</button>
+                                                <!-- <button type="button" class="btn btn-info">Total Comapnies : {{$rec['_count']}}</button> -->
                                                 <div class="row">
 
                                                     <div class="col-sm">
@@ -43,9 +43,15 @@
                                                 <div class="table-responsive">
                                                 <table class="table table-bordered table-striped">
                                                     <thead>
+                                                    <tr>
+                                                            <th width="15%" class="head-tab-custom text-center" colspan="5">RoC Wise Notice Sent </th>
+                                                        </tr>
                                                         <tr>
                                                             <th width="15%" class="head-tab-custom">RoC </th>
-                                                            <th width="10%" class="head-tab-custom">Total Companies</th>
+                                                            <th width="10%" class="head-tab-custom">FY 2017 <br>(Total Companies)</th>
+                                                            <th width="10%" class="head-tab-custom">FY 2018 <br>(Total Companies)</th>
+                                                            <th width="10%" class="head-tab-custom">FY 2019 <br>(Total Companies)</th>
+                                                            <th width="10%" class="head-tab-custom">FY 2020 <br>(Total Companies)</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -54,14 +60,17 @@
 
                                                 <tr>
                                                     <td>{{$ydata['roc_name']}}</td>
-                                                    <td>{{$ydata['_count']}}</td>
+                                                    <td>{{$ydata['c1']}}</td>
+                                                    <td>{{$ydata['c2']}}</td>
+                                                    <td>{{$ydata['c3']}}</td>
+                                                    <td>{{$ydata['c4']}}</td>
                                                 </tr>
 
                                                 <?php $counter1++; ?>
                                                 @endforeach
                                             @else
                                                 <tr>
-                                                    <td colspan="2">No record found.</td>
+                                                    <td colspan="5">No record found.</td>
                                                 </tr>
                                             @endif
 
@@ -71,10 +80,58 @@
                                                 </div>
                                                 <?php } ?>
                                                     </div>
+                                                    </div>
+                                                    <br>
+                                                    <div class="row">
+
                                                     <div class="col-sm">
+                                                    <div class="table-responsive ">
+                                                <table class="table table-bordered table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                            <th width="15%" class="head-tab-custom text-center" colspan="5">Company Class Wise Default Companies(Total)</th>
+                                                        </tr>
+                                                        <tr>
+                                                        <th width="15%" class="head-tab-custom">Company Class </th>
+                                                            <th width="10%" class="head-tab-custom">FY 2017 <br>(Total Companies)</th>
+                                                            <th width="10%" class="head-tab-custom">FY 2018 <br>(Total Companies)</th>
+                                                            <th width="10%" class="head-tab-custom">FY 2019 <br>(Total Companies)</th>
+                                                            <th width="10%" class="head-tab-custom">FY 2020 <br>(Total Companies)</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                <?php $counter1 = 1; ?>
+                                                @if (count($rec['class_wise']) > 0)
+                                                @foreach ($rec['class_wise'] as $ydata)
+
+                                                        <tr>
+                                                        <td>{{$ydata['COMPANY_CLASS']}}</td>
+                                                    <td>{{$ydata['c1']}}</td>
+                                                    <td>{{$ydata['c2']}}</td>
+                                                    <td>{{$ydata['c3']}}</td>
+                                                    <td>{{$ydata['c4']}}</td>
+                                                        </tr>
+
+                                                <?php $counter1++; ?>
+                                                @endforeach
+                                                @else
+                                                    <tr>
+                                                        <td colspan="2">No record found.</td>
+                                                    </tr>
+                                                @endif
+
+
+                                                </tbody>
+                                                </table>
+                                                </div>
+                                                </div>
+                                                <div class="col-sm">
                                                 <div class="table-responsive ">
                                                 <table class="table table-bordered table-striped">
                                                     <thead>
+                                                    <tr>
+                                                            <th width="15%" class="head-tab-custom text-center" colspan="2">FY Wise Default Companies(Total)</th>
+                                                        </tr>
                                                         <tr>
                                                             <th width="15%" class="head-tab-custom">FY </th>
                                                             <th width="10%" class="head-tab-custom">Total Companies</th>

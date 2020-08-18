@@ -13,25 +13,18 @@
                         <div class="tab-content" id="nav-tabContent">
                            <div class="tab-pane fade active show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
 
-                              <div class="row">
-                                 <div class="col-lg-12">
-                                    <div class="au-card recent-report">
-                                       <div class="au-card-inner">
-                                          <figure class="highcharts-figure" style="max-width:1200px;">
-                                             <div id="container_chart1"></div>
-                                          </figure>
-                                       </div>
-                                    </div>
-                                 </div>
-                              </div>
+
                               <div class="row">
                                  <div class="col-lg-12">
                                     <div class="au-card recent-report">
                                        <div class="au-card-inner">
                                        <div class="table-responsive ">
 
-                                    <table class="table table-borderless table-striped  ">
-                                        <thead class="thead-dark">
+                                    <table class="table table-striped">
+                                        <thead class="head-tab-custom text-center">
+                                        <tr>
+                                                <th width="15%" colspan="6">Inspector Wise Notice Sent Report</th>
+                                            </tr>
                                             <tr>
                                                 <th width="15%">Inspector</th>
                                                 <th width="10%">No Action</th>
@@ -46,14 +39,15 @@
                                             @php
                                             $notice_counts =explode(",",$rec->cnt);
                                             $meta_names =explode(",",$rec->action);
+                                            $status =explode(",",$rec->status);
                                             @endphp
                                             <tr>
-                                                <td>{{ $rec->firstName}} ({{ $rec->fName  }})</td>
-                                                <td>{{ (isset($notice_counts[0]))?$notice_counts[0]:'0' }}</td>
-                                                <td>{{ (isset($notice_counts[1]))?$notice_counts[1]:'0' }}</td>
-                                                <td>{{ (isset($notice_counts[2]))?$notice_counts[2]:'0' }}</td>
-                                                <td>{{ (isset($notice_counts[3]))?$notice_counts[3]:'0' }}</td>
-                                                <td>{{ (isset($notice_counts[4]))?$notice_counts[4]:'0' }}</td>
+                                                <td><a href="{{ url('inspector_wise_notice/list?inspector=') }}{{ $rec->firstName}} ({{$rec->fName}})&year={{$year}}" target="_blank">{{ $rec->firstName}} ({{ $rec->fName  }})</a></td>
+                                                <td><a href="{{ url('inspector_wise_notice/list?inspector=') }}{{ $rec->firstName}} ({{$rec->fName}})&year={{$year}}&status={{(isset($status[0]))?$status[0]:''}}" target="_blank">{{ (isset($notice_counts[0]))?$notice_counts[0]:'' }}</td>
+                                                <td><a href="{{ url('inspector_wise_notice/list?inspector=') }}{{ $rec->firstName}} ({{$rec->fName}})&year={{$year}}&status={{(isset($status[1]))?$status[1]:''}}" target="_blank">{{ (isset($notice_counts[1]))?$notice_counts[1]:'' }}</td>
+                                                <td><a href="{{ url('inspector_wise_notice/list?inspector=') }}{{ $rec->firstName}} ({{$rec->fName}})&year={{$year}}&status={{(isset($status[2]))?$status[2]:''}}" target="_blank">{{ (isset($notice_counts[2]))?$notice_counts[2]:'' }}</td>
+                                                <td><a href="{{ url('inspector_wise_notice/list?inspector=') }}{{ $rec->firstName}} ({{$rec->fName}})&year={{$year}}&status={{(isset($status[3]))?$status[3]:''}}" target="_blank">{{ (isset($notice_counts[3]))?$notice_counts[3]:'' }}</td>
+                                                <td><a href="{{ url('inspector_wise_notice/list?inspector=') }}{{ $rec->firstName}} ({{$rec->fName}})&year={{$year}}&status={{(isset($status[4]))?$status[4]:''}}" target="_blank">{{ (isset($notice_counts[4]))?$notice_counts[4]:'' }}</td>
                                             </tr>
 
                                         @endforeach
@@ -63,6 +57,17 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <div class="row">
+                                 <div class="col-lg-12">
+                                    <div class="au-card recent-report">
+                                       <div class="au-card-inner">
+                                          <figure class="highcharts-figure" style="max-width:1200px;">
+                                             <div id="container_chart1"></div>
+                                          </figure>
                                        </div>
                                     </div>
                                  </div>
@@ -116,7 +121,7 @@ Highcharts.chart('container_chart1', {
     },
 
     title: {
-        text: 'Inspector Wise report'
+        text: 'Inspector Wise Notice Sent Report'
     },
 
     xAxis: {
@@ -144,10 +149,25 @@ Highcharts.chart('container_chart1', {
     },
 
     plotOptions: {
+        series: {
+                  cursor: 'pointer',
+                  point: {
+                      events: {
+                          click: function () {
+                              //location.href = 'rangespent.php?year=FY+2016-17&category='+this.category;
+
+                              $url =  "{{ url('inspector_wise_notice/list')}}?year={{$year}}"+'&inspector='+this.category+'&status='+this.series.name;
+
+                              window.open($url, '_blank');
+                          }
+                      }
+                  },
+              },
         column: {
             stacking: 'normal',
             depth: 40
-        }
+        },
+
     },
 
     series: [

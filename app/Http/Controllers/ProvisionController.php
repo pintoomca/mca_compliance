@@ -61,8 +61,12 @@ class ProvisionController extends Controller
          group by provision_id";
         $comp_data = DB::select($query);
 
-        $query = "SELECT COUNT(*) AS _count, provisionId, t3.roc_name, t3.roc_code,YearOfFilling FROM  tble_email_sent AS t2
-        JOIN tble_roc_name_map AS t3 ON  t2.rocCode= t3.roc_code
+        $query = "SELECT provisionId , t3.roc_code , t3.roc_name ,
+        count(CASE WHEN YearOfFilling = '2017' THEN t2.id END) 'c1' ,
+        count(CASE WHEN YearOfFilling = '2018' THEN t2.id END) 'c2' ,
+        count(CASE WHEN YearOfFilling = '2019' THEN t2.id END) 'c3' ,
+        count(CASE WHEN YearOfFilling = '2020' THEN t2.id END) 'c4'
+        FROM tble_email_sent AS t2 JOIN tble_roc_name_map AS t3 ON t2.rocCode= t3.roc_code
         GROUP BY provisionId, t3.roc_name,t3.roc_code,YearOfFilling";
         $r_data = DB::select($query);
         $roc_data = [];
@@ -72,10 +76,10 @@ class ProvisionController extends Controller
              if($rdata->provisionId != $provision_id)
              {
                 $provision_id =$rdata->provisionId;
-                $roc_data[$provision_id][] = ['_count'=>$rdata->_count,'roc_name'=>$rdata->roc_name, 'roc_code'=>$rdata->roc_code];
+                $roc_data[$provision_id][] = ['c1'=>$rdata->c1,'c2'=>$rdata->c2,'c3'=>$rdata->c3,'c4'=>$rdata->c4,'roc_name'=>$rdata->roc_name, 'roc_code'=>$rdata->roc_code];
              }
              else{
-                $roc_data[$provision_id][] = ['_count'=>$rdata->_count,'roc_name'=>$rdata->roc_name, 'roc_code'=>$rdata->roc_code];
+                $roc_data[$provision_id][] = ['c1'=>$rdata->c1,'c2'=>$rdata->c2,'c3'=>$rdata->c3,'c4'=>$rdata->c4,'roc_name'=>$rdata->roc_name, 'roc_code'=>$rdata->roc_code];
              }
         }
 
@@ -97,23 +101,28 @@ class ProvisionController extends Controller
              }
         }
         //Company Type(Private, Public)
-        $query = "SELECT sum(_count) as count, COMPANY_CLASS, provision_id FROM cmp_prvoision_company_class
-        group by provision_id, COMPANY_CLASS";
+        $query = "SELECT provision_id, COMPANY_CLASS
+        , SUM(CASE WHEN YearOfFiling = '2017' THEN t2._count END) 'c1'
+        , SUM(CASE WHEN YearOfFiling = '2018' THEN t2._count END) 'c2'
+        , SUM(CASE WHEN YearOfFiling = '2019' THEN t2._count END) 'c3'
+        , SUM(CASE WHEN YearOfFiling = '2020' THEN t2._count END) 'c4'
+       FROM cmp_prvoision_company_class as t2
+       group by provision_id, COMPANY_CLASS, YearOfFiling";
         $y_data = DB::select($query);
 
-        // $comp_type_data = [];
-        // $provision_id = '';
-        // foreach($y_data as $k=>$rdata)
-        // {
-        //      if($rdata->provision_id != $provision_id)
-        //      {
-        //         $provision_id =$rdata->provision_id;
-        //         $comp_type_data[$provision_id][] = ['_count'=>$rdata->_count, 'YearOfFiling'=>$rdata->YearOfFiling];
-        //      }
-        //      else{
-        //         $comp_type_data[$provision_id][] = ['_count'=>$rdata->_count, 'YearOfFiling'=>$rdata->YearOfFiling];
-        //      }
-        // }
+        $class_data = [];
+        $provision_id = '';
+        foreach($y_data as $k=>$rdata)
+        {
+             if($rdata->provision_id != $provision_id)
+             {
+                $provision_id =$rdata->provision_id;
+                $class_data[$provision_id][] = ['c1'=>$rdata->c1,'c2'=>$rdata->c2,'c3'=>$rdata->c3,'c4'=>$rdata->c4, 'COMPANY_CLASS'=>$rdata->COMPANY_CLASS];
+             }
+             else{
+                $class_data[$provision_id][] = ['c1'=>$rdata->c1,'c2'=>$rdata->c2,'c3'=>$rdata->c3,'c4'=>$rdata->c4, 'COMPANY_CLASS'=>$rdata->COMPANY_CLASS];
+             }
+        }
 
         $chart_data = [];
         foreach($comp_data as $k=>$row)
@@ -122,6 +131,7 @@ class ProvisionController extends Controller
             $chart_data[$k]['provision_id'] = $row->provision_id;
             $chart_data[$k]['year_wise'] = (!empty($year_data[$row->provision_id]))?$year_data[$row->provision_id]:[];
             $chart_data[$k]['roc_wise'] = (!empty($roc_data[$row->provision_id]))?$roc_data[$row->provision_id]:[];
+            $chart_data[$k]['class_wise'] = (!empty($class_data[$row->provision_id]))?$class_data[$row->provision_id]:[];
         }
         $data = ['chart_data'=>$chart_data];
         return view('provision.report', $data);
