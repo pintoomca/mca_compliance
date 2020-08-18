@@ -729,6 +729,20 @@
         pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
     },
     plotOptions: {
+        series: {
+                  cursor: 'pointer',
+                  point: {
+                      events: {
+                          click: function () {
+                              //location.href = 'rangespent.php?year=FY+2016-17&category='+this.category;
+
+                              $url =  "{{ url('inspector_wise_notice/list')}}?year={{$year}}"+'&inspector='+this.category+'&action='+this.series.name;
+
+                              window.open($url, '_blank');
+                          }
+                      }
+                  },
+              },
         column: {
             stacking: 'normal',
             dataLabels: {

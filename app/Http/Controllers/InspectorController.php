@@ -30,6 +30,13 @@ class InspectorController extends Controller
         $params['inspector'] = $request->input('inspector');
         $params['year'] = $request->input('year');
         $params['status'] = $request->input('status');
+        if($request->input('action')!='')
+        {
+            $meta_data = DB::table('tble_provision_meta_data')->where('action', $request->input('action'))->first();
+            $params['status'] = $meta_data->status;
+            $status = $meta_data->status;
+        }
+
         if($request->input('searchKey') !='')
         {
             $search_key = " AND (company_name LIKE '%".$request->input('searchKey')."%' OR cin = '".$request->input('searchKey')."')";
@@ -48,11 +55,11 @@ class InspectorController extends Controller
        inner join tble_provision_meta_data ON tble_provision_master_final_set.status=tble_provision_meta_data.status
        where tble_inspector_details.deptID=2 and tble_inspector_details.catID=50
        and tble_inspector_details.firstName ='$fName' and YearOfFilling=$year
-       and (tble_provision_master_final_set.status='$status' OR tble_provision_master_final_set.status IN (select status from tble_provision_meta_data where action='$status')) $search_key  LIMIT $slice_init, $perPage";
+       and (tble_provision_master_final_set.status='$status') $search_key  LIMIT $slice_init, $perPage";
        $pagedData = DB::select($query);
 
 
-       echo $query = "SELECT count(distinct tble_email_sent.cin) as _count
+       $query = "SELECT count(distinct tble_email_sent.cin) as _count
        FROM tble_email_sent
        join tble_inspector_details on  tble_email_sent.rocCode= tble_inspector_details.rocCode
        join master_users on  tble_inspector_details.userID= master_users.uID
@@ -60,8 +67,7 @@ class InspectorController extends Controller
        inner join tble_provision_meta_data ON tble_provision_master_final_set.status=tble_provision_meta_data.status
        where tble_inspector_details.deptID=2 and tble_inspector_details.catID=50
        and tble_inspector_details.firstName ='$fName' and YearOfFilling=$year
-       and (tble_provision_master_final_set.status='$status' OR tble_provision_master_final_set.status IN (select status from tble_provision_meta_data where action='$status')) $search_key";
-       die;
+       and (tble_provision_master_final_set.status='$status') $search_key";
        $count_data = DB::select($query);
        $total = $count_data[0]->_count;
        $notice_data = new \Illuminate\Pagination\LengthAwarePaginator($pagedData, $total, $perPage, $currentPage);
@@ -99,6 +105,32 @@ class InspectorController extends Controller
         }
         $data = ['inspector_names'=>$inspector_names, 'meta_name'=>$meta_name,'year' =>$curr_year, 'comp_data'=>$comp_data];
         //echo "<pre>";print_r($data);die;
+        return view('inspector.report', $data);
+    }
+
+    public function reportDetail(Request $request)
+    {
+        $curr_year = ($request->input('year') != '') ? $request->input('year'):'2017';
+        $query = "select group_concat(_count) as cnt, group_concat(action) as action, group_concat(status) as status, firstName, fName,
+        YearOfFilling from cmp_inspector_status_report
+        where `YearOfFilling` = $curr_year group by firstName, fName";
+        $comp_data = DB::select($query);
+
+        $inspector_names = [];
+        $comp_count = [];
+        $meta_name = [];
+        foreach($comp_data as $rec)
+        {
+            $inspector_names[] = $rec->firstName." ( ".$rec->fName." )";
+            $notice_counts =explode(",",$rec->cnt);
+            $meta_names =explode(",",$rec->action);
+            $meta_name['No Action'][] = (isset($notice_counts[0]))?$notice_counts[0]:'0';
+            $meta_name['Notice Sent'][] = (isset($notice_counts[1]))?$notice_counts[1]:'0';
+            $meta_name['Drop Charges'][] = (isset($notice_counts[2]))?$notice_counts[2]:'0';
+            $meta_name['Subject to Prosecution'][] = (isset($notice_counts[3]))?$notice_counts[3]:'0';
+            $meta_name['Further Examination Required.'][] = (isset($notice_counts[4]))?$notice_counts[4]:'0';
+        }
+        $data = ['inspector_names'=>$inspector_names, 'meta_name'=>$meta_name,'year' =>$curr_year, 'comp_data'=>$comp_data];
         return view('inspector.report', $data);
     }
 }

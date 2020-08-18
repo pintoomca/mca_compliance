@@ -156,7 +156,7 @@ Highcharts.chart('container_chart1', {
                           click: function () {
                               //location.href = 'rangespent.php?year=FY+2016-17&category='+this.category;
 
-                              $url =  "{{ url('inspector_wise_notice/list')}}?year={{$year}}"+'&inspector='+this.category+'&status='+this.series.name;
+                              $url =  "{{ url('inspector_wise_notice/list')}}?year={{$year}}"+'&inspector='+this.category+'&action='+this.series.name;
 
                               window.open($url, '_blank');
                           }
