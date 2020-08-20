@@ -8,7 +8,7 @@ use Validator, DB, Hash;
 class ProvisionController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the show cause notice.
      *
      * @return \Illuminate\Http\Response
      */
@@ -62,10 +62,10 @@ class ProvisionController extends Controller
         $comp_data = DB::select($query);
 
         $query = "SELECT provisionId , t3.roc_code , t3.roc_name ,
-        count(CASE WHEN YearOfFilling = '2017' THEN t2.id END) 'c1' ,
-        count(CASE WHEN YearOfFilling = '2018' THEN t2.id END) 'c2' ,
-        count(CASE WHEN YearOfFilling = '2019' THEN t2.id END) 'c3' ,
-        count(CASE WHEN YearOfFilling = '2020' THEN t2.id END) 'c4'
+        count(DISTINCT (CASE WHEN YearOfFilling = '2017' THEN t2.cin END)) 'c1' ,
+        count(DISTINCT (CASE WHEN YearOfFilling = '2018' THEN t2.cin  END)) 'c2' ,
+        count(DISTINCT (CASE WHEN YearOfFilling = '2019' THEN t2.cin  END)) 'c3' ,
+        count(DISTINCT (CASE WHEN YearOfFilling = '2020' THEN t2.cin  END)) 'c4'
         FROM tble_email_sent AS t2 JOIN tble_roc_name_map AS t3 ON t2.rocCode= t3.roc_code
         GROUP BY provisionId, t3.roc_name,t3.roc_code,YearOfFilling";
         $r_data = DB::select($query);
@@ -135,5 +135,51 @@ class ProvisionController extends Controller
         }
         $data = ['chart_data'=>$chart_data];
         return view('provision.report', $data);
+    }
+        /**
+     * Display a listing of the non compliance company.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function nonComplianceList(Request $request)
+    {
+        $search_key = '';
+        DB::enableQueryLog();
+        $year  = $request->input('year');
+        $provisionId  = str_replace("Provision ","",$request->input('provisionId'));
+
+        $params = ['year'=>$year, 'provisionId'=>$provisionId];
+        if($request->input('searchKey') !='')
+        {
+            $search_key = " AND (company_name LIKE '%".$request->input('searchKey')."%' OR cin = '".$request->input('searchKey')."')";
+            $params['searchKey'] = $request->input('searchKey');
+        }
+        $perPage = 10;
+        $currentPage = $request->input('page') ?: 1;
+        $counter = (isset($currentPage) && $currentPage> 1) ? ($currentPage-1)*$perPage+1:1;
+        $slice_init = ($currentPage == 1) ? 0 : (($currentPage*$perPage)-$perPage);
+
+       $query = "SELECT distinct cin, company_name, YearOfFilling
+       FROM tble_email_sent
+       where provisionId= '".$provisionId."' and YearOfFilling=$year $search_key LIMIT $slice_init, $perPage";
+
+       $pagedData = DB::select($query);
+
+       $query = "SELECT count(distinct cin) as _count
+       FROM tble_email_sent
+       where provisionId= '".$provisionId."' and YearOfFilling=".$year.$search_key;
+       $count_data = DB::select($query);
+       $total = $count_data[0]->_count;
+
+       $notice_data = new \Illuminate\Pagination\LengthAwarePaginator($pagedData, $total, $perPage, $currentPage);
+
+       $notice_data->setPath(url('provision_wise_notice/list'))->appends($params);
+
+        // $query = DB::getQueryLog();
+
+        // echo "<pre>";
+        // print_r($query);
+        // die;
+        return view('provision.index',['notice_data'=>$notice_data, 'total'=>$total,'counter'=>$counter,'provisionId'=>$provisionId, 'year'=>$year,'searchKey' => $request->input('searchKey')]);
     }
 }

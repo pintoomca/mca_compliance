@@ -22,6 +22,11 @@ class InspectorController extends Controller
 
         $search_key = '';
         DB::enableQueryLog();
+        $perPage = 10;
+        $currentPage = $request->input('page') ?: 1;
+        $counter = (isset($currentPage) && $currentPage> 1) ? ($currentPage-1)*$perPage+1:1;
+        $slice_init = ($currentPage == 1) ? 0 : (($currentPage*$perPage)-$perPage);
+
         $inspector  = $request->input('inspector');
         $year  = $request->input('year');
         $status  = $request->input('status');
@@ -42,33 +47,61 @@ class InspectorController extends Controller
             $search_key = " AND (company_name LIKE '%".$request->input('searchKey')."%' OR cin = '".$request->input('searchKey')."')";
             $params['searchKey'] = $request->input('searchKey');
         }
-        $perPage = 10;
-        $currentPage = $request->input('page') ?: 1;
-        $counter = (isset($currentPage) && $currentPage> 1) ? ($currentPage-1)*$perPage+1:1;
-        $slice_init = ($currentPage == 1) ? 0 : (($currentPage*$perPage)-$perPage);
+        $swhere = '';
+        if($status !='')
+        {
+            $swhere ="and (tble_provision_master_final_set.status='$status')";
 
-       $query = "SELECT distinct tble_email_sent.cin, company_name,  YearOfFilling
-       FROM tble_email_sent
-       join tble_inspector_details on  tble_email_sent.rocCode= tble_inspector_details.rocCode
-       join master_users on  tble_inspector_details.userID= master_users.uID
-       join tble_provision_master_final_set ON tble_email_sent.cin=tble_provision_master_final_set.CIN
-       inner join tble_provision_meta_data ON tble_provision_master_final_set.status=tble_provision_meta_data.status
-       where tble_inspector_details.deptID=2 and tble_inspector_details.catID=50
-       and tble_inspector_details.firstName ='$fName' and YearOfFilling=$year
-       and (tble_provision_master_final_set.status='$status') $search_key  LIMIT $slice_init, $perPage";
-       $pagedData = DB::select($query);
+            $query = "select * from (SELECT distinct tble_email_sent.cin, company_name,  YearOfFilling
+            FROM tble_email_sent
+            join tble_inspector_details on  tble_email_sent.rocCode= tble_inspector_details.rocCode
+            join master_users on  tble_inspector_details.userID= master_users.uID
+            join tble_provision_master_final_set ON tble_email_sent.cin=tble_provision_master_final_set.CIN
+            inner join tble_provision_meta_data ON tble_provision_master_final_set.status=tble_provision_meta_data.status
+            where tble_inspector_details.deptID=2 and tble_inspector_details.catID=50
+            and tble_inspector_details.firstName ='$fName' and YearOfFilling=$year
+            $search_key $swhere LIMIT $slice_init, $perPage) as tbl";
+            $pagedData = DB::select($query);
 
 
-       $query = "SELECT count(distinct tble_email_sent.cin) as _count
-       FROM tble_email_sent
-       join tble_inspector_details on  tble_email_sent.rocCode= tble_inspector_details.rocCode
-       join master_users on  tble_inspector_details.userID= master_users.uID
-       inner join tble_provision_master_final_set ON tble_email_sent.cin=tble_provision_master_final_set.CIN
-       inner join tble_provision_meta_data ON tble_provision_master_final_set.status=tble_provision_meta_data.status
-       where tble_inspector_details.deptID=2 and tble_inspector_details.catID=50
-       and tble_inspector_details.firstName ='$fName' and YearOfFilling=$year
-       and (tble_provision_master_final_set.status='$status') $search_key";
-       $count_data = DB::select($query);
+            $query = "SELECT count(distinct tble_email_sent.cin) as _count
+            FROM tble_email_sent
+            join tble_inspector_details on  tble_email_sent.rocCode= tble_inspector_details.rocCode
+            join master_users on  tble_inspector_details.userID= master_users.uID
+            inner join tble_provision_master_final_set ON tble_email_sent.cin=tble_provision_master_final_set.CIN
+            inner join tble_provision_meta_data ON tble_provision_master_final_set.status=tble_provision_meta_data.status
+            where tble_inspector_details.deptID=2 and tble_inspector_details.catID=50
+            and tble_inspector_details.firstName ='$fName' and YearOfFilling=$year
+            $swhere  $search_key";
+            $count_data = DB::select($query);
+        }
+        else{
+            $query = "SELECT tble_email_sent.cin, company_name,  YearOfFilling
+            FROM tble_email_sent
+            join tble_inspector_details on  tble_email_sent.rocCode= tble_inspector_details.rocCode
+            join master_users on  tble_inspector_details.userID= master_users.uID
+            join tble_provision_master_final_set ON tble_email_sent.cin=tble_provision_master_final_set.CIN
+            inner join tble_provision_meta_data ON tble_provision_master_final_set.status=tble_provision_meta_data.status
+            where tble_inspector_details.deptID=2 and tble_inspector_details.catID=50
+            and tble_inspector_details.firstName ='$fName' and YearOfFilling=$year
+            $search_key group by tble_email_sent.cin, company_name,  YearOfFilling LIMIT $slice_init, $perPage";
+            $pagedData = DB::select($query);
+
+
+            $query = "SELECT count(distinct tble_email_sent.cin) as _count
+            FROM tble_email_sent
+            join tble_inspector_details on  tble_email_sent.rocCode= tble_inspector_details.rocCode
+            join master_users on  tble_inspector_details.userID= master_users.uID
+            inner join tble_provision_master_final_set ON tble_email_sent.cin=tble_provision_master_final_set.CIN
+            inner join tble_provision_meta_data ON tble_provision_master_final_set.status=tble_provision_meta_data.status
+            where tble_inspector_details.deptID=2 and tble_inspector_details.catID=50
+            and tble_inspector_details.firstName ='$fName' and YearOfFilling=$year
+            $swhere  $search_key";
+            $count_data = DB::select($query);
+        }
+
+
+
        $total = $count_data[0]->_count;
        $notice_data = new \Illuminate\Pagination\LengthAwarePaginator($pagedData, $total, $perPage, $currentPage);
 

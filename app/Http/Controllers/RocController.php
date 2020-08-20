@@ -20,11 +20,17 @@ class RocController extends Controller
         DB::enableQueryLog();
         $roc  = $request->input('roc');
         $year  = $request->input('year');
-        $params = ['roc'=>$roc, 'year'=>$year];
+        $provision_id  = $request->input('provision_id');
+        $params = ['roc'=>$roc, 'year'=>$year, 'provision_id'=>$provision_id];
         if($request->input('searchKey') !='')
         {
             $search_key = " AND (company_name LIKE '%".$request->input('searchKey')."%' OR cin = '".$request->input('searchKey')."')";
             $params['searchKey'] = $request->input('searchKey');
+        }
+        $swhere = '';
+        if($provision_id !='')
+        {
+            $swhere ="and (tble_email_sent.provisionId='$provision_id')";
         }
         $perPage = 10;
         $currentPage = $request->input('page') ?: 1;
@@ -34,13 +40,13 @@ class RocController extends Controller
        $query = "SELECT distinct cin, company_name, roc_name, YearOfFilling
        FROM tble_email_sent
        join tble_roc_name_map on  tble_email_sent.rocCode= tble_roc_name_map.roc_code
-       where roc_name= '".$roc."' and YearOfFilling=$year $search_key  LIMIT $slice_init, $perPage";
+       where roc_name= '".$roc."' and YearOfFilling=$year $swhere $search_key  LIMIT $slice_init, $perPage";
        $pagedData = DB::select($query);
 
        $query = "SELECT count(distinct cin) as _count
        FROM tble_email_sent
        join tble_roc_name_map on  tble_email_sent.rocCode= tble_roc_name_map.roc_code
-       where roc_name= '".$roc."' and YearOfFilling=$year ".$search_key;
+       where roc_name= '".$roc."' and YearOfFilling=$year $swhere ".$search_key;
 
        $count_data = DB::select($query);
         $total = $count_data[0]->_count;

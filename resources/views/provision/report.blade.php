@@ -59,11 +59,11 @@
                                                 @foreach ($rec['roc_wise'] as $ydata)
 
                                                 <tr>
-                                                    <td>{{$ydata['roc_name']}}</td>
-                                                    <td>{{$ydata['c1']}}</td>
-                                                    <td>{{$ydata['c2']}}</td>
-                                                    <td>{{$ydata['c3']}}</td>
-                                                    <td>{{$ydata['c4']}}</td>
+                                                    <td><a href="{{ url('notice_roc/list?roc=') }}{{$ydata['roc_name']}}&provision_id={{ $rec['provision_id']}}" target="_blank">{{$ydata['roc_name']}}</a></td>
+                                                    <td><a href="{{ url('notice_roc/list?roc=') }}{{$ydata['roc_name']}}&year=2017&provision_id={{ $rec['provision_id']}}" target="_blank">{{(!empty($ydata['c1']))?$ydata['c1']:''}}</a></td>
+                                                    <td><a href="{{ url('notice_roc/list?roc=') }}{{$ydata['roc_name']}}&year=2018&provision_id={{ $rec['provision_id']}}" target="_blank">{{(!empty($ydata['c2']))?$ydata['c2']:''}}</a></td>
+                                                    <td><a href="{{ url('notice_roc/list?roc=') }}{{$ydata['roc_name']}}&year=2019&provision_id={{ $rec['provision_id']}}" target="_blank">{{(!empty($ydata['c3']))?$ydata['c3']:''}}</a></td>
+                                                    <td><a href="{{ url('notice_roc/list?roc=') }}{{$ydata['roc_name']}}&year=2020&provision_id={{ $rec['provision_id']}}" target="_blank">{{(!empty($ydata['c4']))?$ydata['c4']:''}}</a></td>
                                                 </tr>
 
                                                 <?php $counter1++; ?>
@@ -104,13 +104,13 @@
                                                 @if (count($rec['class_wise']) > 0)
                                                 @foreach ($rec['class_wise'] as $ydata)
 
-                                                        <tr>
-                                                        <td>{{$ydata['COMPANY_CLASS']}}</td>
+                                                    <tr>
+                                                    <td><a href="{{ url('notice_roc/list?roc=') }}{{$ydata['roc_name']}}&year=2020&provision_id={{ $rec['provision_id']}}" target="_blank">{{$ydata['COMPANY_CLASS']}}</td>
                                                     <td>{{$ydata['c1']}}</td>
                                                     <td>{{$ydata['c2']}}</td>
                                                     <td>{{$ydata['c3']}}</td>
                                                     <td>{{$ydata['c4']}}</td>
-                                                        </tr>
+                                                    </tr>
 
                                                 <?php $counter1++; ?>
                                                 @endforeach
