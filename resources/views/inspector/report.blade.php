@@ -3,13 +3,19 @@
             @section('title', 'Compliance Monitoring Dashboard')
 
             @section('content')
-            <div class="main-content loader" style="padding-top:60px !important;">
+            <div class="main-content loader" style="padding-top:90px !important;">
                <div class="section__content section__content--p30">
                   <div class="container-fluid">
                      <div class="row">
 
                      </div>
                      <div class="default-tab">
+                     <nav>
+                           <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                              <!-- <a class="nav-item nav-link active show" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true" title="Show Cause Notice Trace">SCN</a> -->
+                              <a class="nav-item nav-link <?=($year == '2017')?'active':'';?>" id="nav-fy1617-tab" data-toggle="tab" href="{{url('dashboard?year=2017')}}" role="tab" aria-controls="nav-fy1617" aria-selected="false">FY 2016-17</a>
+                           </div>
+                        </nav>
                         <div class="tab-content" id="nav-tabContent">
                            <div class="tab-pane fade active show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
 

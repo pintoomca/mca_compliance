@@ -105,7 +105,7 @@
                                                 @foreach ($rec['class_wise'] as $ydata)
 
                                                     <tr>
-                                                    <td><a href="{{ url('notice_roc/list?roc=') }}{{$ydata['roc_name']}}&year=2020&provision_id={{ $rec['provision_id']}}" target="_blank">{{$ydata['COMPANY_CLASS']}}</td>
+                                                    <td><a href="{{ url('notice_roc/list?roc=') }}{{$ydata['COMPANY_CLASS']}}&year=2020&provision_id={{ $rec['provision_id']}}" target="_blank">{{$ydata['COMPANY_CLASS']}}</td>
                                                     <td>{{$ydata['c1']}}</td>
                                                     <td>{{$ydata['c2']}}</td>
                                                     <td>{{$ydata['c3']}}</td>
