@@ -20,7 +20,6 @@
                                             placeholder="Search for datas &amp; reports..." onkeyup = " ($(this).val() === '') ? this.form.submit() : '';">
                                             <input type="hidden" name="provision_id" value="<?=$provision_id;?>">
                                             <input type="hidden" name="year" value="<?=$year;?>">
-                                            <input type="hidden" name="status" value="<?=$status;?>">
                                             <button class="au-btn--submit" type="submit"><i class="zmdi zmdi-search"></i></button>
                                         </form>
                                     </div>
@@ -29,7 +28,7 @@
                                 <div class="col-sm-4">
                                 <div class="card" style="margin-top:-35px; margin-bottom:5px;">
                                     <div class="card-body card-block">
-                                    <button type="button" class="btn btn-outline-primary btn-lg active">Total Notice: <?=$total;?></button>
+                                    <button type="button" class="btn btn-outline-primary btn-lg active">Total Notice Sent: <?=$total;?></button>
                                     </div>
                                 </div>
                             </div>
@@ -75,11 +74,11 @@
                                                             <span class="au-checkmark"></span>
                                                         </label></td> -->
                                                 <td>{{ ++$counter }}</td>
-                                                <td>{{ $user->CIN }}</td>
-                                                <td>{{ $user->Companyname }}</td>
-                                                <!-- <td class="text-right">{{ $user->YearOfFiling }}</td> -->
+                                                <td>{{ $user->cin }}</td>
+                                                <td>{{ $user->company_name }}</td>
+                                                <!-- <td class="text-right">{{ $user->YearOfFilling }}</td> -->
                                                 <td class="text-right">{{ $user->Alert }}</td>
-                                                <td class="text-right"><a href="{{url('compliance_company/view?cin=')}}{{ $user->CIN }}&year={{ $year }}" target="_blank" title="View"><i class="fa fa-table"></i></a></td>
+                                                <td class="text-right"><a href="{{url('compliance_company/view?cin=')}}{{ $user->cin }}&year={{ $year }}" target="_blank" title="View"><i class="fa fa-table"></i></a></td>
                                             </tr>
 
                                         @endforeach
@@ -94,7 +93,7 @@
                                         <button class="au-btn au-btn-load">load more</button>
                                     </div> -->
                                 </div>
-                                {{ $notice_data->appends(['year'=>$year,'provision_id' => $provision_id,'status' => $status])->links() }}
+                                {{ $notice_data->appends(['year'=>$year,'provision_id' => $provision_id])->links() }}
                             </div>
                         </div>
                     </div>

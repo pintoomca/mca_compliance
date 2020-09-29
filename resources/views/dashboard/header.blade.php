@@ -3,7 +3,7 @@
     <link href="{{asset('assets/CoolAdmin/vendor/font-awesome-4.7/css/font-awesome.min.css')}}" rel="stylesheet" media="all">
     <link href="{{asset('assets/CoolAdmin/vendor/font-awesome-5/css/fontawesome-all.min.css')}}" rel="stylesheet" media="all">
     <link href="{{asset('assets/CoolAdmin/vendor/mdi-font/css/material-design-iconic-font.min.css')}}" rel="stylesheet" media="all">
-    
+
     <link href="{{asset('assets/CoolAdmin/js/jquery-3.1.1.min.js')}}" rel="stylesheet" media="all">
     <!-- Bootstrap CSS-->
     <link href="{{asset('assets/CoolAdmin/vendor/bootstrap-4.1/bootstrap.min.css')}}" rel="stylesheet" media="all">
@@ -18,5 +18,5 @@
     <link href="{{asset('assets/CoolAdmin/vendor/perfect-scrollbar/perfect-scrollbar.css')}}" rel="stylesheet" media="all">
 
     <!-- Main CSS-->
-    <link href="{{asset('assets/CoolAdmin/css/theme.css')}}" rel="stylesheet" media="all">
+    <link href="{{asset('assets/CoolAdmin/css/theme.css')}}?data('H:i:s')" rel="stylesheet" media="all">
     <link href="{{asset('assets/CoolAdmin/highchart_cms/highchart.css')}}" rel="stylesheet" media="all">

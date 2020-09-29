@@ -13,56 +13,8 @@
                         </div> -->
                         <div class="col-sm-12 ad-search-form " style="margin-top:-10px;">
                            <div class="card au-card" style="padding-bottom:10xp;!important">
-                              <div class="card-body card-block" >
-                                 <form class="form-horizontal" action="{{url('company/list')}}" method="GET" target="_blank">
-                                    <div class="row form-group">
-                                       <div class="col-4">
-                                          <input type="text" id="compname" name="compname" placeholder="Enter Company name or CIN" class="form-control">
-                                       </div>
-                                       <div class="col-4">
-                                          <select name="LISTED_FLAG" id="LISTED_FLAG" class="form-control">
-                                             <option value="">Listing Status</option>
-                                             <option value="Listed">Listed</option>
-                                             <option value="Unlisted">Unlisted</option>
-                                          </select>
-                                       </div>
-                                       <div class="col-4">
-                                          <select name="COMPANY_STATUS" id="COMPANY_STATUS" class="form-control">
-                                             <option value="">Company Status</option>
-                                             <option value="ACTV">Active</option>
-                                             <option value="STOF">Strike Off</option>
-                                             <option value="DISD">Disolved</option>
-                                             <option value="AMAL">Amalgamation</option>
-                                             <option LIQD="LIQD">Liquidation</option>
-                                             <option value="DRMT">Dormant</option>
-                                          </select>
-                                       </div>
-                                    </div>
-                                    <div class="row form-group">
-                                       <div class="col-4">
-                                          <select name="COMPANY_CLASS" id="COMPANY_CLASS" class="form-control">
-                                             <option value="">Company Class</option>
-                                             <option value="Public">Public</option>
-                                             <option value="Private">Private</option>
-                                             <option value="Private(One Person Company)">Private(One Person Company)</option>
-                                          </select>
-                                       </div>
-                                       <div class="col-4">
-                                          <select name="COMPANY_SUBCAT" id="COMPANY_SUBCAT" class="form-control">
-                                             <option value="">Sub Category</option>
-                                             <option value="Non-govt company">Non-govt company</option>
-                                             <option value="Guarantee and Association comp">Guarantee and Association company</option>
-                                             <option value="State Govt company">State Govt company</option>
-                                             <option value="Union Govt company">Union Govt company</option>
-                                             <option value="Subsidiary of Foreign Company">Subsidiary of Foreign Company</option>
-                                          </select>
-                                       </div>
-                                       <div class="col-4">
-                                          <button type="submit" class="btn btn-primary_new btn-md col-sm-4"><i class="fa fa-search"></i>Search</button>
-                                          <button type="reset" class="btn btn-primary_new btn-md col-sm-4">Reset</button>
-                                       </div>
-                                    </div>
-                                 </form>
+                              <div class="card-body card-block">
+                              @include('dashboard.search')
                               </div>
                            </div>
                         </div>
@@ -104,20 +56,22 @@
                                  </div>
                               </div>
                               <div class="row">
-                                 <div class="col-lg-6">
+                                 <div class="col-lg-12">
                                     <div class="au-card recent-report">
                                        <div class="au-card-inner">
-                                          <figure class="highcharts-figure">
-                                             <div id="container_chart1"></div>
+                                          <figure class="highcharts-figure" style="max-width:1200px;">
+                                             <div id="container_bubble"></div>
                                           </figure>
                                        </div>
                                     </div>
                                  </div>
-                                 <div class="col-lg-6">
+                              </div>
+                              <div class="row">
+                                 <div class="col-lg-12">
                                     <div class="au-card chart-percent-card">
                                        <div class="au-card-inner">
                                           <figure class="highcharts-figure">
-                                             <div id="container_chart3"></div>
+                                             <div id="container_balloon"></div>
                                           </figure>
                                        </div>
                                     </div>
@@ -146,70 +100,56 @@
                               <div class="row">
                                  <div class="col-lg-12">
                                     <div class="table-responsive">
-                                       <table class="table table-borderless" style="background-color:#fff;">
-                                          <thead>
-                                             <tr class="table-primary">
-                                                <th class="text-center">Provision</th>
-                                                <?php foreach($notice_status['notice_actions'] as $v){?>
-                                                <th class="text-center"><?php echo $v?></th>
-                                                <?php } ?>
-                                             </tr>
-                                          </thead>
-                                          <tbody>
-                                             <?php
-                                            foreach($notice_status['notice_counts'] as $k=>$v){ ?>
-                                             <tr>
-                                                <td class="text-center table-secondary"><?=$k;?></td>
-                                                <td class="text-center">
-                                                   <div class="text-center">
-                                                      <span>
-                                                      <?php if(isset($v[1])){ ?>
-                                                      <a href="{{ url('notice/list?provision_id='.$k.'&status=1') }}&year={{$year}}" target="_blank"><?php echo $v[1];?></a>
-                                                      <?php } else { echo '-'; } ?>
-                                                      </span>
-                                                   </div>
-                                                </td>
-                                                <td class="text-center  table-success">
-                                                   <div class="text-center">
-                                                      <span>
-                                                      <?php if(isset($v[2])){ ?>
-                                                      <a href="{{ url('notice/list?provision_id='.$k.'&status=2') }}&year={{$year}}" target="_blank"><?php echo $v[2];?></a>
-                                                      <?php } else { echo '-'; } ?>
-                                                      </span>
-                                                   </div>
-                                                </td>
-                                                <td class="text-center table-info">
-                                                   <div class="text-center">
-                                                      <span>
-                                                      <?php if(isset($v[3])){ ?>
-                                                      <a href="{{ url('notice/list?provision_id='.$k.'&status=3') }}&year={{$year}}" target="_blank"><?php echo $v[3];?></a>
-                                                      <?php } else { echo '-'; } ?>
-                                                      </span>
-                                                   </div>
-                                                </td>
-                                                <td class="text-center table-danger">
-                                                   <div class="text-center">
-                                                      <span>
-                                                      <?php if(isset($v[4])){ ?>
-                                                      <a href="{{ url('notice/list?provision_id='.$k.'&status=3') }}&year={{$year}}" target="_blank"><?php echo $v[4];?></a>
-                                                      <?php } else { echo '-'; } ?>
-                                                      </span>
-                                                   </div>
-                                                </td>
-                                                <td class="text-center table-warning">
-                                                   <div class="text-center">
-                                                      <span>
-                                                      <?php if(isset($v[0])){ ?>
-                                                      <a href="{{ url('notice/list?provision_id='.$k.'&status=0') }}&year={{$year}}" target="_blank"><?php echo $v[0];?></a>
-                                                      <?php } else { echo '-'; } ?>
-                                                      </span>
-                                                   </div>
-                                                </td>
-                                             </tr>
-                                             <?php } ?>
-                                          </tbody>
-                                       </table>
+                                        <table class="table table-striped">
+                                        <thead class="head-tab-custom text-center">
+                                        <tr>
+                                                <th width="15%" colspan="6">Provision Wise Notice Status Report </th>
+                                            </tr>
+                                            <tr>
+                                                <th width="15%">Provision</th>
+                                                <th width="10%">No Action</th>
+                                                <th width="15%">Drop Charges</th>
+                                                <th width="20%">Subject to Prosecution</th>
+                                                <th width="25%">Further Examination Required</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-center">
+                                        @php
+                                        $sum1 = 0;
+                                        $sum3 = 0;
+                                        $sum4 = 0;
+                                        $sum5 = 0;
+                                        @endphp
+                                        @foreach ($notice_status as $rec)
+                                            @php
+                                            $sum1 +=(isset($rec->c1))?$rec->c1:'0';
+                                            $sum3 +=(isset($rec->c3))?$rec->c3:'0';
+                                            $sum4 +=(isset($rec->c4))?$rec->c4:'0';
+                                            $sum5 +=(isset($rec->c5))?$rec->c5:'0';
+                                            @endphp
+                                            <tr>
+                                                <td>{{ $rec->provision_id}}</td>
+                                                <td><a href="{{ url('inspector_wise_notice/list?provision_id=') }}{{ $rec->provision_id}}&year={{$year}}&status=0" target="_blank">{{ (!empty($rec->c1))?$rec->c1:'' }}</td>
+                                                <td><a href="{{ url('inspector_wise_notice/list?provision_id=') }}{{ $rec->provision_id}}&year={{$year}}&status=2" target="_blank">{{ (!empty($rec->c3))?$rec->c3:'' }}</td>
+                                                <td><a href="{{ url('inspector_wise_notice/list?provision_id=') }}{{ $rec->provision_id}}&year={{$year}}&status=3" target="_blank">{{ (!empty($rec->c4))?$rec->c4:'' }}</td>
+                                                <td><a href="{{ url('inspector_wise_notice/list?provision_id=') }}{{ $rec->provision_id}}&year={{$year}}&status=4" target="_blank">{{ (!empty($rec->c5))?$rec->c5:'' }}</td>
+                                            </tr>
+
+                                        @endforeach
+
+                                        <tr>
+                                                <th width="15%">Grand Total</th>
+                                                <th width="10%">{{ $sum1  }}</th>
+                                                <th width="15%">{{ $sum3  }}</th>
+                                                <th width="20%">{{ $sum4  }}</th>
+                                                <th width="25%">{{ $sum5  }}</th>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
                                     </div>
+
+
                                  </div>
                               </div>
                            </div>
@@ -417,172 +357,6 @@
       }]
       });
    </script>
-
-   <script>
-      Highcharts.chart('container_chart1', {
-
-      title: {
-      text: 'Provision Wise Total Companies'
-      },
-      credits: {enabled : false},
-      // subtitle: {
-      //     text: 'Source: thesolarfoundation.com'
-      // },
-
-      yAxis: {
-      title: {
-          text: 'Number of Companies'
-      }
-      },
-
-      xAxis: {
-          categories: <?php echo json_encode($provision_wise_data['_years']); ?>
-      },
-
-      legend: {
-      layout: 'vertical',
-      align: 'right',
-      verticalAlign: 'middle'
-      },
-
-      plotOptions: {
-      series: {
-          cursor: 'pointer',
-          colorByPoint: true,
-                  point: {
-                      events: {
-                          click: function () {
-                              //location.href = 'rangespent.php?year=FY+2016-17&category='+this.category;
-                              $url =  "{{ url('provision_wise_company/list')}}?provisionId="+this.series.name+'&year='+this.category;
-
-                              window.open($url, '_blank');
-                          }
-                      }
-                  },
-          label: {
-              connectorAllowed: false
-          },
-          pointStart: 2017
-      }
-      },
-
-      series: [
-      //     {
-      //     name: 'Installation',
-      //     data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
-      // }, {
-      //     name: 'Manufacturing',
-      //     data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
-      // }, {
-      //     name: 'Sales & Distribution',
-      //     data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
-      // }, {
-      //     name: 'Project Development',
-      //     data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
-      // }, {
-      //     name: 'Other',
-      //     data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
-      // }
-      <?php  foreach($provision_wise_data['_names'] as $name){ ?>
-      {
-      name: '<?php echo $name; ?>',
-      data: <?php echo json_encode($provision_wise_data['_count'][$name]); ?>
-      },
-      <?php } ?>
-      ],
-
-      responsive: {
-      rules: [{
-          condition: {
-              maxWidth: 500
-          },
-          chartOptions: {
-              legend: {
-                  layout: 'horizontal',
-                  align: 'center',
-                  verticalAlign: 'bottom'
-              }
-          }
-      }]
-      }
-
-      });
-   </script>
-   <script>
-      Highcharts.chart('container_chart3', {
-
-      title: {
-      text: 'Provision Wise Total Email Sent'
-      },
-      credits: {enabled : false},
-      // subtitle: {
-      //     text: 'Source: thesolarfoundation.com'
-      // },
-
-      yAxis: {
-      title: {
-          text: 'Number of Emails'
-      }
-      },
-
-      xAxis: {
-          categories: <?php echo json_encode($provision_wise_email['_years']); ?>
-      },
-
-      legend: {
-      layout: 'vertical',
-      align: 'right',
-      verticalAlign: 'middle'
-      },
-
-      plotOptions: {
-      series: {
-          cursor: 'pointer',
-          colorByPoint: true,
-                  point: {
-                      events: {
-                          click: function () {
-                              //location.href = 'rangespent.php?year=FY+2016-17&category='+this.category;
-                              $url =  "{{ url('provision_wise_notice/list')}}?provisionId="+this.series.name+'&year='+this.category;
-
-                              window.open($url, '_blank');
-                          }
-                      }
-                  },
-          label: {
-              connectorAllowed: false
-          },
-          pointStart: 2017
-      }
-      },
-
-      series: [
-
-      <?php  foreach($provision_wise_email['_names'] as $name){ ?>
-      {
-      name: '<?php echo $name; ?>',
-      data: <?php echo json_encode($provision_wise_email['_count'][$name]); ?>
-      },
-      <?php } ?>
-      ],
-
-      responsive: {
-      rules: [{
-          condition: {
-              maxWidth: 500
-          },
-          chartOptions: {
-              legend: {
-                  layout: 'horizontal',
-                  align: 'center',
-                  verticalAlign: 'bottom'
-              }
-          }
-      }]
-      }
-
-      });
-   </script>
    <script>
       $('#container_chart4').highcharts({
 
@@ -781,6 +555,222 @@
     <?php } ?>
 ]
 });
-   </script>
+</script>
+<script>
+Highcharts.chart('container_bubble', {
 
+chart: {
+    type: 'bubble',
+    plotBorderWidth: 1,
+    zoomType: 'xy'
+},
+
+legend: {
+    enabled: false
+},
+credits: {
+            enabled: false
+        },
+title: {
+    text: 'Provision Wise Non Compliance, Notice Sent, Reply Received Report'
+},
+
+// subtitle: {
+//     text: 'Source: <a href="http://www.euromonitor.com/">Euromonitor</a> and <a href="https://data.oecd.org/">OECD</a>'
+// },
+
+// accessibility: {
+//     point: {
+//         valueDescriptionFormat: '{index}. {point.name}, fat: {point.x}g, sugar: {point.y}g, obesity: {point.z}%.'
+//     }
+// },
+
+xAxis: {
+    gridLineWidth: 1,
+    // title: {
+    //     text: 'Daily fat intake'
+    // },
+    labels: {
+        format: '{value}'
+    },
+    // plotLines: [{
+    //     color: 'black',
+    //     dashStyle: 'dot',
+    //     width: 2,
+    //     value: 65,
+    //     label: {
+    //         rotation: 0,
+    //         y: 15,
+    //         style: {
+    //             fontStyle: 'italic'
+    //         },
+    //         text: 'Safe fat intake 65g/day'
+    //     },
+    //     zIndex: 3
+    // }],
+    // accessibility: {
+    //     rangeDescription: 'Range: 60 to 100 grams.'
+    // }
+},
+
+yAxis: {
+    startOnTick: false,
+    endOnTick: false,
+    title: {
+        text: ''
+    },
+
+    labels: {
+        format: '{value}'
+    },
+    maxPadding: 0.2,
+    // plotLines: [{
+    //     color: 'black',
+    //     dashStyle: 'dot',
+    //     width: 2,
+    //     value: 50,
+    //     label: {
+    //         align: 'right',
+    //         style: {
+    //             fontStyle: 'italic'
+    //         },
+    //         text: 'Safe sugar intake 50g/day',
+    //         x: -10
+    //     },
+    //     zIndex: 3
+    // }],
+    accessibility: {
+        rangeDescription: ''
+    }
+},
+
+tooltip: {
+    useHTML: true,
+    headerFormat: '<table>',
+    pointFormat: '<tr><th colspan="2"><h3>{point.name}</h3></th></tr>' +
+        '<tr><th>Non Compliance:</th><td>{point.x}</td></tr>' +
+        '<tr><th>Notice Sent:</th><td>{point.y}</td></tr>' +
+        '<tr><th>Reply Received:</th><td>{point.z}</td></tr>',
+    footerFormat: '</table>',
+    followPointer: true
+},
+
+plotOptions: {
+    series: {
+        dataLabels: {
+            enabled: true,
+            format: '{point.name}'
+        }
+    }
+},
+
+series: [{
+    data: [
+        <?php  foreach($data_nsr as $row){ ?>
+            { x: <?=$row->dcount;?>, y: <?=$row->scount;?>, z: <?=$row->rcount;?>, name: 'Provision <?=$row->provision_id;?>', country: '' },
+    <?php } ?>
+        // { x: 64, y: 82.9, z: 31.3, name: 'NZ', country: '' }
+    ]
+}]
+
+});
+</script>
+<script>
+
+    Highcharts.chart('container_balloon', {
+        title: {
+            text: ''
+        },
+        credits: {
+            enabled: false
+        },
+        xAxis: {
+            categories:   [141.88],
+        },
+        series: [
+        <?php  foreach($data_overnsr as $row){ ?>
+            {
+                    type:'pie',
+                    zIndex: 3,
+                    colors: ['#809bec'],
+                    depth: 50,
+                    size:200,
+                    center: [100, 150],
+                    showInLegend: false,
+                    y: 0,
+                    dataLabels: {
+                        enabled:true,
+                        distance: -100 ,// Individual distance
+                        formatter: function() {
+                            return '<b>Non Compliance<br/>' + 'FY 2017' + '<br/></b> Total:'  + this.y ;
+                        },
+                    },
+                    name: 'Total Non Compliance',
+                    data: [<?=$row->dcount;?>],
+                },
+                {
+                type:'pie',
+                size:200,
+                colors: ['#8080ec'],
+                depth: 50,
+                center: [350, 150],
+                showInLegend: false,
+                y: 0,
+                dataLabels: {
+                    enabled:true,
+                    distance: -100, // Individual distance
+                    formatter: function() {
+                        return '<b>Notice Sent<br/> FY 2017' + '<br/></b> Total:'  + this.y ;
+                    },
+                },
+                name: 'Total Notice Sent',
+                data: [<?=$row->scount;?>],
+            },
+            {
+                type:'pie',
+                colors: ['#9b80ec'],
+                center: [600, 150],
+                size:200,
+                depth: 50,
+                showInLegend: false,
+                y: 0,
+                dataLabels: {
+                    enabled:true,
+                    distance: -100, // Individual distance
+                    formatter: function() {
+                        return '<b>Reply Received<br/> FY 2017' + '<br/></b> Total:'  + this.y ;
+                    },
+                },
+                name: 'Total Reply Received',
+                data: [<?=$row->rcount;?>],
+            }
+           <?php } ?>
+
+
+        ]
+
+    });
+</script>
+<script>
+var user_list = <?php echo json_encode($user_list) ;?>;
+$(document).on('change', '#inspector', function(event) {
+    $('#roc').find('option').remove();
+    $('#roc').append('<option value="">--ALL ROC--</option>');
+
+	$.each(user_list, function(key, value) {
+
+		$('#inspector :selected').each(function(){
+			var state1 = $(this).text();
+
+            if(value.Region.toLowerCase() == state1.toLowerCase())
+            {
+                $('#roc').append($("<option></option>").attr("value",value.rocName).text(value.rocName));
+            }
+		});
+
+
+	});
+
+});
+</script>
 @endsection

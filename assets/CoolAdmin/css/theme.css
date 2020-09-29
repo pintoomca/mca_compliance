@@ -18,7 +18,7 @@ Primary use:	Open Source
 	+ Footer / footer
 
 -------------------------------------------------------------------*/
-/*------------------------------------------------------------------
+/*------------------------------------------------------------------47
 # [Color codes]
 
 # Text Color (text): #666666
@@ -4049,6 +4049,7 @@ section {
 .recent-report {
     padding-bottom: 35px;
     margin-bottom: 25px;
+	min-height:425px;
 }
 
 .chart-info {
@@ -4747,6 +4748,7 @@ section {
 /* ----- Footer ----- */
 footer{
 	background-color:#bab2ed;
+	margin-top: 20px;
 }
 
 .copyright {
@@ -14674,8 +14676,61 @@ footer{
 	background-color:#8d84cc;
 	color:#fff;
 }
+.head-chart
+{
+	background-color:#8d84cc;
+	color:#fff;
+	text-align:center;
+	padding:10px;
+	font-weight:700;
+}
 .table td, .table th {
     padding: .40rem;
     vertical-align: top;
     border-top: 1px solid #dee2e6;
+}
+
+.nav-link {
+ display:block;
+ padding:.5rem 1rem
+}
+.nav-link:focus,
+.nav-link:hover {
+ text-decoration:none
+}
+.nav-link.disabled {
+ color:#6c757d
+}
+.nav-tabs {
+ border-bottom:1px solid #dee2e6
+}
+.nav-tabs .nav-item {
+ margin-bottom:-1px
+}
+.nav-tabs .nav-link {
+ border:1px solid transparent;
+ border-top-left-radius:.25rem;
+ border-top-right-radius:.25rem;
+ background-color:#8d84cc !important;
+ color:#FFF;
+}
+.nav-tabs .nav-link:focus,
+.nav-tabs .nav-link:hover {
+ border-color:#e9ecef #e9ecef #dee2e6
+}
+.nav-tabs .nav-link.disabled {
+ color:#6c757d;
+ background-color:transparent;
+ border-color:transparent
+}
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active {
+ color:#FFF;
+ background-color:#5642d7 !important;
+ border-color:#dee2e6 #dee2e6 #fff
+}
+.nav-tabs .dropdown-menu {
+ margin-top:-1px;
+ border-top-left-radius:0;
+ border-top-right-radius:0
 }

@@ -62,6 +62,9 @@ Route::middleware(['auth','web'])->group(function () {
     Route::get('compliance_mail/view', 'ComplianceCompanyController@mailView');
 
     Route::get('inspector-wise-report', 'InspectorController@report');
+    Route::get('inspector-wise-report-step2', 'InspectorController@reportStep2');
+    Route::get('inspector-wise-report-step3', 'InspectorController@reportStep3');
+    Route::get('inspector-wise-report-step1', 'InspectorController@reportStep1');
     Route::get('provision-wise-report', 'ProvisionController@report');
     Route::get('year-wise-report', 'NoticeController@report');
     Route::get('roc-wise-report', 'RocController@report');
